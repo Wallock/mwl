@@ -34,19 +34,34 @@
 
   html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 
+  
   body {
     background: var(--surface);
     color: var(--text);
-    font-family: var(--font-sarabun), system-ui, sans-serif;
+    font-family: "Google Sans", "Anuphan", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "GRAD" 0;
     font-size: 16px;
     line-height: 1.7;
   }
 
   h1, h2, h3, h4, h5 {
-    font-family: var(--font-sarabun), system-ui, sans-serif;
+    font-family: "Google Sans", "Anuphan", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings: "GRAD" 200;
     line-height: 1.25;
     color: var(--text);
   }
+
+  .font-black  { font-weight: 700; font-variation-settings: "GRAD" 200; }
+  .font-extrabold { font-weight: 700; font-variation-settings: "GRAD" 150; }
+  .font-bold   { font-weight: 700; font-variation-settings: "GRAD" 100; }
+  .font-semibold { font-weight: 600; font-variation-settings: "GRAD" 50; }
+  .font-medium { font-weight: 500; font-variation-settings: "GRAD" 0; }
 
   *, *::before, *::after { box-sizing: border-box; }
 }
@@ -193,7 +208,7 @@
   /* ── Nav ─────────────────────────────────────── */
   .c-nav-link {
     color: var(--text);
-    text-decoration: none; font-weight: 500; font-size: 15px;
+    text-decoration: none; font-weight: 800; font-size: 17px;
     padding: 4px 0; position: relative; transition: color 0.2s;
   }
   .c-nav-link::after {
@@ -276,6 +291,15 @@
   /* ── Float ─────────────────────────────────── */
   .animate-float { animation: float-y 4s ease-in-out infinite; }
 
+  /* ── Marquee strip ─────────────────────────── */
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    width: max-content;
+    animation: marquee-scroll 28s linear infinite;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+
   /* ── Shimmer bar ────────────────────────────── */
   .shimmer-bar {
     background: linear-gradient(90deg,#7A5C28 0%,#C9A96E 20%,#EDD99A 50%,#C9A96E 80%,#7A5C28 100%);
@@ -294,6 +318,11 @@
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(-10px); }
 }
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
 @keyframes shimmer-bar {
   0%   { background-position: -200% center; }
   100% { background-position:  200% center; }
@@ -305,4 +334,28 @@
 @keyframes star-pop {
   0%, 100% { transform: scale(1);    opacity: 1; }
   50%       { transform: scale(1.25); opacity: 0.85; }
+}
+@keyframes menu-slide-down {
+  from { opacity: 0; transform: translateY(-12px); clip-path: inset(0 0 100% 0); }
+  to   { opacity: 1; transform: translateY(0);     clip-path: inset(0 0 0% 0); }
+}
+.menu-slide-down {
+  animation: menu-slide-down 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes logo-shine {
+  0%   { transform: translateX(-120%) skewX(-20deg); }
+  100% { transform: translateX(320%)  skewX(-20deg); }
+}
+.logo-shine-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.logo-shine-wrap::after {
+  content: '';
+  position: absolute;
+  top: -10%; left: 0;
+  width: 40%; height: 120%;
+  background: linear-gradient(105deg, transparent 0%, transparent 20%, rgba(255,255,255,0.18) 40%, rgba(255,255,255,0.38) 50%, rgba(255,255,255,0.18) 60%, transparent 80%, transparent 100%);
+  animation: logo-shine 3.2s ease-in-out infinite;
+  pointer-events: none;
 }

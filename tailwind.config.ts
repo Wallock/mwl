@@ -26,8 +26,8 @@ const config: Config = {
         cream: "#FDFAF8",
       },
       fontFamily: {
-        display: ["var(--font-fraunces)", "Georgia", "serif"],
-        body: ["var(--font-sarabun)", "system-ui", "sans-serif"],
+        display: ['"Google Sans"', "system-ui", "sans-serif"],
+        body: ['"Google Sans"', "system-ui", "sans-serif"],
       },
       letterSpacing: {
         widest2: "0.2em",

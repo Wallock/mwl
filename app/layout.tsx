@@ -1,20 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Sarabun } from "next/font/google";
 import "./globals.css";
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  display: "swap",
-  axes: ["opsz", "SOFT", "WONK"],
-});
-
-const sarabun = Sarabun({
-  subsets: ["latin", "thai"],
-  variable: "--font-sarabun",
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "แม่บ้านดีดี เซอร์วิส | บริการจัดหาแม่บ้านคุณภาพ",
@@ -29,7 +14,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="th" className={`${fraunces.variable} ${sarabun.variable}`}>
+    <html lang="th">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&family=Google+Sans:ital,opsz,wght,GRAD@0,17..18,400..700,-50..200;1,17..18,400..700,-50..200&display=swap" rel="stylesheet" />
+      </head>
       <body>{children}</body>
     </html>
   );

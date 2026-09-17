@@ -1,13 +1,7 @@
 import { IMG } from "@/lib/images";
 import Reveal from "./Reveal";
 
-const trainingPhotos = [
-  { src: IMG.dsc06983, caption: "อบรมก่อนส่งงาน" },
-  { src: IMG.dsc06792, caption: "ทดสอบทักษะ" },
-  { src: IMG.dsc06833, caption: "ฝึกอบรมเชิงปฏิบัติ" },
-  { src: IMG.dsc06815, caption: "ประเมินและรับรอง" },
-  { src: IMG.dsc06213, caption: "พร้อมส่งบ้านคุณ" },
-];
+const sliderImages = [1,2,3,4,5,6,7,8,9].map(n => `/images/silde/${n}-300x200.webp`);
 
 const checks = [
   { num: "01", title: "ตรวจโรคติดต่อ 5 ชนิด",      sub: "มาตรฐานกรมการแพทย์" },
@@ -22,23 +16,20 @@ export default function CloneTrust() {
   return (
     <section className="bg-cream">
 
-      {/* 5-photo training strip */}
-      <div className="grid grid-cols-5">
-        {trainingPhotos.map((p, i) => (
-          <div key={i} className="relative overflow-hidden group">
-            <img
-              src={p.src}
-              alt={p.caption}
-              className="w-full object-cover block transition-transform duration-500 group-hover:scale-105"
-              style={{ aspectRatio: "4/3" }}
-            />
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent pt-8 pb-1.5 px-1">
-              <p className="text-white text-[9px] sm:text-[11px] font-semibold text-center leading-tight hidden sm:block">
-                {p.caption}
-              </p>
-            </div>
-          </div>
-        ))}
+      {/* Infinite scroll strip */}
+      <div style={{ overflow: "hidden", lineHeight: 0 }}>
+        <div className="marquee-track">
+          {[...Array(2)].map((_, pass) =>
+            sliderImages.map((src, i) => (
+              <img
+                key={`${pass}-${i}`}
+                src={src}
+                alt=""
+                style={{ height: 180, width: "auto", objectFit: "cover", flexShrink: 0, display: "block" }}
+              />
+            ))
+          )}
+        </div>
       </div>
 
       {/* Animated shimmer gold bar */}

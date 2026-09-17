@@ -18,9 +18,9 @@ export default function Home() {
       <CloneNavbar />
       <main>
         <CloneHero />
-        <CloneCTAButtons />
-        <CloneTrust />
         <CloneAbout />
+        <CloneTrust />
+        <CloneCTAButtons />
         <CloneClients />
         <CloneServices />
         <CloneGallery />
