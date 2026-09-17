@@ -16,9 +16,27 @@ export default function RootLayout({
   return (
     <html lang="th">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        {/* LCP hero image — discoverable immediately, high priority */}
+        <link
+          rel="preload"
+          as="image"
+          href="/images/bg_header.png"
+          fetchPriority="high"
+        />
+
+        {/* Google Fonts — crossOrigin fixes third-party cookie blocking */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&family=Google+Sans:ital,opsz,wght,GRAD@0,17..18,400..700,-50..200;1,17..18,400..700,-50..200&display=swap" rel="stylesheet" />
+        {/* display=swap: text visible immediately with fallback font while loading */}
+        <link
+          rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&family=Google+Sans:ital,opsz,wght,GRAD@0,17..18,400..700,-50..200;1,17..18,400..700,-50..200&display=swap"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&family=Google+Sans:ital,opsz,wght,GRAD@0,17..18,400..700,-50..200;1,17..18,400..700,-50..200&display=swap"
+          rel="stylesheet"
+        />
       </head>
       <body>{children}</body>
     </html>
