@@ -1,5 +1,7 @@
+"use client";
 import Reveal from "./Reveal";
 import { ShieldCheck, Stethoscope, FileCheck, GraduationCap, MapPin } from "lucide-react";
+import YoutubeEmbed from "./YoutubeEmbed";
 
 const checks = [
   { Icon: Stethoscope,   text: "ตรวจโรคติดต่อก่อนส่งงาน" },
@@ -38,16 +40,7 @@ export default function CloneAbout() {
                 boxShadow: "0 0 0 6px rgba(201,169,110,0.07), 0 20px 60px rgba(100,60,0,0.16), 0 4px 16px rgba(158,125,72,0.12)",
               }}
             >
-              <iframe
-                width="100%"
-                height="100%"
-                src="https://www.youtube-nocookie.com/embed/udTUWGXdaDg?si=03TlVZ8rom37vQ7o&controls=0"
-                title="แม่บ้านดีดี เซอร์วิส"
-                className="absolute inset-0 w-full h-full border-0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              />
+              <YoutubeEmbed videoId="udTUWGXdaDg" title="แม่บ้านดีดี เซอร์วิส" />
             </div>
           </Reveal>
 

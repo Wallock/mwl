@@ -13,7 +13,7 @@ const config: Config = {
         "surface-gold": "#F8F0DC",
         ink: "#231108",
         "ink-muted": "#7A5548",
-        "ink-subtle": "#B89080",
+        "ink-subtle": "#8A6557",
         gold: "#C9A96E",
         "gold-dark": "#9E7D48",
         "gold-light": "#EAD9B0",

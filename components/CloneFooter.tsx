@@ -72,7 +72,7 @@ export default function CloneFooter() {
               sizes="200px"
               style={{ height: "48px", width: "auto", marginBottom: 16 }}
             />
-            <p className="text-[#78716C] text-sm leading-[1.9]">
+            <p className="text-[#A09890] text-sm leading-[1.9]">
               หจก.จัดหางานแม่บ้านดีดี เซอร์วิส<br />
               206, 208 ถ.เจริญสนิทวงศ์ 82<br />
               แขวงบางอ้อ เขตบางพลัด กรุงเทพฯ 10700
@@ -135,10 +135,10 @@ export default function CloneFooter() {
         </div>
 
         <div className="border-t border-gold/10 pt-5 flex flex-wrap justify-between gap-2">
-          <p className="text-[#4E4540] text-xs">
+          <p className="text-[#A09890] text-xs">
             © {new Date().getFullYear()} หจก.จัดหางานแม่บ้านดีดี เซอร์วิส · สงวนลิขสิทธิ์
           </p>
-          <p className="text-[#4E4540] text-xs">
+          <p className="text-[#A09890] text-xs">
             ใบอนุญาตจัดหางาน · กรมการจัดหางาน · กรุงเทพมหานคร
           </p>
         </div>

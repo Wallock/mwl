@@ -1,6 +1,7 @@
 "use client";
 import { CheckCheck, Star, Clock, ShieldCheck } from "lucide-react";
 import Image from "next/image";
+import { preload } from "react-dom";
 import { useEffect, useRef, useState } from "react";
 
 function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
@@ -42,6 +43,7 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
 }
 
 export default function CloneHero() {
+  preload("/images/bg_header.webp", { as: "image", fetchPriority: "high" });
   return (
     <section style={{ position: "relative", lineHeight: 0 }}>
       <Image
@@ -50,6 +52,7 @@ export default function CloneHero() {
         width={1920}
         height={800}
         priority
+        sizes="100vw"
         style={{ width: "100%", height: "auto", display: "block" }}
       />
       {/* dark overlay left side */}
@@ -190,7 +193,7 @@ export default function CloneHero() {
           fontSize: "1.3vw", fontWeight: 700,
         }}>
           <span style={{
-            background: "#22c55e",
+            background: "#15803d",
             padding: "0.4vw 0.9vw",
             display: "flex", alignItems: "center", justifyContent: "center",
             flexShrink: 0,
@@ -198,7 +201,7 @@ export default function CloneHero() {
             <CheckCheck size="1.5em" color="#fff" strokeWidth={2.5} />
           </span>
           <span style={{
-            background: "#16a34a",
+            background: "#166534",
             color: "#fff",
             padding: "0.4vw 0.9vw",lineHeight: 1.3,
             display: "flex", alignItems: "center",

@@ -81,7 +81,7 @@ export default function CloneTrust() {
                       {c.num}
                     </span>
                     <div className="pt-1">
-                      <h4 className="font-bold text-ink text-sm lg:text-[15px] mb-0.5 leading-snug">{c.title}</h4>
+                      <h3 className="font-bold text-ink text-sm lg:text-[15px] mb-0.5 leading-snug">{c.title}</h3>
                       <p className="text-ink-subtle text-xs">{c.sub}</p>
                     </div>
                   </div>

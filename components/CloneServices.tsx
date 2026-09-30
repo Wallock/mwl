@@ -85,6 +85,7 @@ export default function CloneServices() {
                     height={400}
                     className="w-full block object-cover transition-transform duration-500 group-hover:scale-[1.06]"
                     style={{ aspectRatio: "1/1", height: "auto", width: "100%" }}
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     priority={i === 0}
                   />
                   <span className={`absolute top-2.5 left-2.5 text-white text-[10px] font-bold px-2.5 py-1 rounded-full ${
