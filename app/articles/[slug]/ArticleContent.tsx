@@ -25,6 +25,7 @@ interface WPPost {
 
 function decodeHtml(str: string) {
   return str
+    .replace(/\[(&hellip;|&#8230;|…)\]/g, "")
     .replace(/&amp;/g, "&")
     .replace(/&#8217;/g, "'")
     .replace(/&#8220;/g, '"')
@@ -32,8 +33,7 @@ function decodeHtml(str: string) {
     .replace(/&#8211;/g, "–")
     .replace(/&hellip;/g, "")
     .replace(/&#8230;/g, "")
-    .replace(/\[&hellip;\]/g, "")
-    .replace(/\[…\]/g, "")
+    .replace(/\[\s*\]/g, "")
     .replace(/<[^>]+>/g, "")
     .trim();
 }
@@ -47,7 +47,7 @@ function seoTitle(raw: string): string {
 
 function seoDesc(raw: string): string {
   const clean = raw.replace(/\s+/g, " ").trim();
-  return clean.length > 155 ? clean.slice(0, 154) + "…" : clean;
+  return clean.length > 120 ? clean.slice(0, 119) + "…" : clean;
 }
 
 function formatThaiDate(iso: string) {
