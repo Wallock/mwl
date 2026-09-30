@@ -46,12 +46,17 @@ async function getPosts(): Promise<WPPost[]> {
       console.error("[articles] WP API error:", res.status, res.statusText, await res.text().then(t => t.slice(0, 200)));
       return [];
     }
-    return await res.json();
+    const data = await res.json();
+    console.log("[articles] got", Array.isArray(data) ? data.length : "non-array", typeof data === "object" ? JSON.stringify(data).slice(0, 200) : data);
+    if (!Array.isArray(data)) return [];
+    return data;
   } catch (err) {
     console.error("[articles] WP API fetch failed:", err);
     return [];
   }
 }
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "บทความ | แม่บ้านดีดี เซอร์วิส",
