@@ -93,7 +93,9 @@ export default function ArticleContent({ slug }: { slug: string }) {
       if (!p) return;
 
       const title = seoTitle(decodeHtml(p.title.rendered));
-      const excerpt = seoDesc(decodeHtml(p.excerpt?.rendered ?? ""));
+      const excerptClean = decodeHtml(p.excerpt?.rendered ?? "");
+      const contentClean = decodeHtml(p.content?.rendered ?? "");
+      const excerpt = seoDesc(excerptClean.length >= 70 ? excerptClean : contentClean);
       const img = p._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
       const url = `https://www.maidwonderland.com/articles/${slug}`;
 

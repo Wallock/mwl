@@ -99,7 +99,10 @@ export async function generateMetadata({
 
   const rawTitle = post.yoast_head_json?.title ?? decodeHtml(post.title.rendered);
   const title = seoTitle(rawTitle);
-  const rawDesc = post.yoast_head_json?.description ?? decodeHtml(post.excerpt.rendered);
+  const excerptClean = decodeHtml(post.excerpt?.rendered ?? "");
+  const contentClean = decodeHtml(post.content?.rendered ?? "");
+  const rawDesc = post.yoast_head_json?.description
+    ?? (excerptClean.length >= 70 ? excerptClean : contentClean);
   const description = seoDesc(rawDesc);
   const img = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
 
