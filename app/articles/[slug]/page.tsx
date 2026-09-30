@@ -65,21 +65,28 @@ export async function generateStaticParams(): Promise<{ slug: string }[]> {
       page++;
     }
   } catch {}
-  return slugs.map((slug) => ({ slug }));
+  return slugs.map((slug) => ({
+    slug: slug.includes("%") ? decodeURIComponent(slug) : slug,
+  }));
 }
 
 async function getPost(slug: string): Promise<WPPost | null> {
-  try {
-    const res = await fetch(
-      `${BASE}/wp-json/wp/v2/posts?slug=${encodeURIComponent(slug)}&_embed`,
-      { headers: { "User-Agent": UA }, next: { revalidate: 3600 } }
-    );
-    if (!res.ok) return null;
-    const posts: WPPost[] = await res.json();
-    return posts[0] ?? null;
-  } catch {
-    return null;
+  // WP sometimes stores slugs as percent-encoded literals — try both forms
+  const candidates = [slug, encodeURIComponent(slug)];
+  for (const s of candidates) {
+    try {
+      const res = await fetch(
+        `${BASE}/wp-json/wp/v2/posts?slug=${encodeURIComponent(s)}&_embed`,
+        { headers: { "User-Agent": UA }, next: { revalidate: 3600 } }
+      );
+      if (!res.ok) continue;
+      const posts: WPPost[] = await res.json();
+      if (posts[0]) return posts[0];
+    } catch {
+      continue;
+    }
   }
+  return null;
 }
 
 export async function generateMetadata({
@@ -88,8 +95,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const decoded = slug.includes("%") ? decodeURIComponent(slug) : slug;
-  const post = await getPost(decoded);
+  const post = await getPost(slug);
   if (!post) return {};
 
   const title = post.yoast_head_json?.title ?? `${decodeHtml(post.title.rendered)} | แม่บ้านดีดี เซอร์วิส`;
@@ -120,8 +126,7 @@ export default async function ArticleDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const decoded = slug.includes("%") ? decodeURIComponent(slug) : slug;
-  const post = await getPost(decoded);
+  const post = await getPost(slug);
   if (!post) notFound();
 
   const title = decodeHtml(post.title.rendered);
