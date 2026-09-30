@@ -1,5 +1,7 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const BASE = "https://www.maidwonderland.com";
 const API = `${BASE}/wp-json/wp/v2/posts?page=1&per_page=8&_embed`;
@@ -20,18 +22,23 @@ function formatThaiDate(iso: string) {
   return `${d.getDate()} ${thMonths[d.getMonth()]}`;
 }
 
-async function getPosts(): Promise<WPPost[]> {
-  try {
-    const res = await fetch(API, { next: { revalidate: 3600 } });
-    if (!res.ok) return [];
-    return await res.json();
-  } catch {
-    return [];
-  }
+function decodeHtml(str: string) {
+  return str
+    .replace(/&amp;/g, "&")
+    .replace(/&#8217;/g, "'")
+    .replace(/&#8220;/g, '"')
+    .replace(/&#8221;/g, '"');
 }
 
-export default async function CloneArticles() {
-  const posts = await getPosts();
+export default function CloneArticles() {
+  const [posts, setPosts] = useState<WPPost[]>([]);
+
+  useEffect(() => {
+    fetch(API)
+      .then((r) => r.json())
+      .then((data) => { if (Array.isArray(data)) setPosts(data); })
+      .catch(() => {});
+  }, []);
 
   return (
     <section className="relative bg-white py-12 lg:py-16 overflow-hidden">
@@ -49,36 +56,41 @@ export default async function CloneArticles() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-5">
-          {posts.map((post, i) => {
-            const media = post._embedded?.["wp:featuredmedia"]?.[0];
-            const imgSrc = media?.source_url ?? "";
-            const title = post.title.rendered
-              .replace(/&amp;/g, "&")
-              .replace(/&#8217;/g, "'")
-              .replace(/&#8220;/g, '"')
-              .replace(/&#8221;/g, '"');
-            return (
-              <Link
-                key={post.id}
-                href={`/articles/${post.slug}`}
-                className={`art-card${i >= 4 ? " hidden sm:block" : ""}`}
-              >
-                <div className="overflow-hidden">
-                  {imgSrc && (
-                    <Image src={imgSrc} alt={media?.alt_text || title} width={800} height={450} className="art-img" style={{ height: "auto" }} />
-                  )}
-                </div>
-                <div className="p-3.5 lg:p-4">
-                  <span className="inline-flex items-center gap-1 bg-gold/10 text-gold-dark border border-gold/25 rounded-full px-2.5 py-0.5 text-[10px] font-bold mb-2">
-                    ✦ {formatThaiDate(post.date)}
-                  </span>
-                  <h4 className="text-xs lg:text-[13px] font-bold text-ink leading-[1.5] line-clamp-3">{title}</h4>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+        {posts.length > 0 && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-5">
+            {posts.map((post, i) => {
+              const media = post._embedded?.["wp:featuredmedia"]?.[0];
+              const imgSrc = media?.source_url ?? "";
+              const title = decodeHtml(post.title.rendered);
+              return (
+                <Link
+                  key={post.id}
+                  href={`/articles/${post.slug}`}
+                  className={`art-card${i >= 4 ? " hidden sm:block" : ""}`}
+                >
+                  <div className="overflow-hidden">
+                    {imgSrc && (
+                      <Image
+                        src={imgSrc}
+                        alt={media?.alt_text || title}
+                        width={800}
+                        height={450}
+                        className="art-img"
+                        style={{ height: "auto" }}
+                      />
+                    )}
+                  </div>
+                  <div className="p-3.5 lg:p-4">
+                    <span className="inline-flex items-center gap-1 bg-gold/10 text-gold-dark border border-gold/25 rounded-full px-2.5 py-0.5 text-[10px] font-bold mb-2">
+                      ✦ {formatThaiDate(post.date)}
+                    </span>
+                    <h3 className="text-xs lg:text-[13px] font-bold text-ink leading-[1.5] line-clamp-3">{title}</h3>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
 
         <div className="text-center mt-10">
           <Link href="/articles" className="btn-pink">

@@ -13,17 +13,27 @@ const keywords: Record<string, string> = {
   maid: "แม่บ้าน", nanny: "พี่เลี้ยงเด็ก", elder: "ผู้ดูแลผู้สูงอายุ", labor: "แรงงานทั่วไป",
 };
 
+const UA = "Mozilla/5.0 (compatible; NextJS/1.0; +https://maidwonderland.com)";
+
 async function getArticleSlugs(): Promise<string[]> {
+  const slugs: string[] = [];
+  let page = 1;
   try {
-    const res = await fetch(`${BASE}/wp-json/wp/v2/posts?per_page=100&_fields=slug`, {
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) return [];
-    const posts: { slug: string }[] = await res.json();
-    return posts.map((p) => p.slug);
-  } catch {
-    return [];
-  }
+    while (true) {
+      const res = await fetch(
+        `${BASE}/wp-json/wp/v2/posts?per_page=100&page=${page}&_fields=slug`,
+        { next: { revalidate: 3600 }, headers: { "User-Agent": UA } }
+      );
+      if (!res.ok) break;
+      const posts: { slug: string }[] = await res.json();
+      if (!Array.isArray(posts) || posts.length === 0) break;
+      slugs.push(...posts.map((p) => p.slug));
+      const totalPages = parseInt(res.headers.get("X-WP-TotalPages") ?? "1", 10);
+      if (page >= totalPages) break;
+      page++;
+    }
+  } catch {}
+  return slugs;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

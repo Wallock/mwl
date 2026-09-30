@@ -1,19 +1,19 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import CloneNavbar from "@/components/CloneNavbar";
 import CloneFooter from "@/components/CloneFooter";
-import GSAPAnimations from "@/components/GSAPAnimations";
-import Reveal from "@/components/Reveal";
+import { useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const BASE = "https://www.maidwonderland.com";
-const API = `${BASE}/wp-json/wp/v2/posts?page=1&per_page=20&_embed`;
+const PER_PAGE = 12;
 
 interface WPPost {
   id: number;
   slug: string;
   title: { rendered: string };
   date: string;
-  link: string;
   excerpt: { rendered: string };
   _embedded?: {
     "wp:featuredmedia"?: Array<{ source_url: string; alt_text: string }>;
@@ -22,8 +22,8 @@ interface WPPost {
 
 function formatThaiDate(iso: string) {
   const d = new Date(iso);
-  const thMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-  return `${d.getDate()} ${thMonths[d.getMonth()]} ${d.getFullYear() + 543}`;
+  const m = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+  return `${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear() + 543}`;
 }
 
 function decodeHtml(str: string) {
@@ -36,73 +36,57 @@ function decodeHtml(str: string) {
     .replace(/<[^>]+>/g, "");
 }
 
-async function getPosts(): Promise<WPPost[]> {
-  try {
-    const res = await fetch(API, {
-      next: { revalidate: 3600 },
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; NextJS/1.0; +https://maidwonderland.com)" },
-    });
-    if (!res.ok) {
-      console.error("[articles] WP API error:", res.status, res.statusText, await res.text().then(t => t.slice(0, 200)));
-      return [];
-    }
-    const data = await res.json();
-    console.log("[articles] got", Array.isArray(data) ? data.length : "non-array", typeof data === "object" ? JSON.stringify(data).slice(0, 200) : data);
-    if (!Array.isArray(data)) return [];
-    return data;
-  } catch (err) {
-    console.error("[articles] WP API fetch failed:", err);
-    return [];
-  }
-}
+export default function ArticlesPage() {
+  const [posts, setPosts] = useState<WPPost[] | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-export const dynamic = "force-dynamic";
+  useEffect(() => {
+    setPosts(null);
+    fetch(`${BASE}/wp-json/wp/v2/posts?page=${page}&per_page=${PER_PAGE}&_embed`)
+      .then((r) => {
+        const tp = parseInt(r.headers.get("X-WP-TotalPages") ?? "1", 10);
+        setTotalPages(isNaN(tp) ? 1 : tp);
+        return r.json();
+      })
+      .then((data) => setPosts(Array.isArray(data) ? data : []))
+      .catch(() => setPosts([]));
+  }, [page]);
 
-export const metadata = {
-  title: "บทความ | แม่บ้านดีดี เซอร์วิส",
-  description: "บทความและคู่มือน่ารู้เกี่ยวกับการจ้างแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ และดูแลบ้าน จากผู้เชี่ยวชาญแม่บ้านดีดี เซอร์วิส กว่า 20 ปี",
-  alternates: { canonical: "https://www.maidwonderland.com/articles" },
-  openGraph: {
-    title: "บทความ | แม่บ้านดีดี เซอร์วิส",
-    description: "บทความและคู่มือน่ารู้เกี่ยวกับการจ้างแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ และดูแลบ้าน จากผู้เชี่ยวชาญแม่บ้านดีดี เซอร์วิส กว่า 20 ปี",
-    url: "https://www.maidwonderland.com/articles",
-    siteName: "แม่บ้านดีดี เซอร์วิส",
-    images: [{ url: "/images/bg_header.webp", width: 1920, height: 800, alt: "แม่บ้านดีดี เซอร์วิส" }],
-    locale: "th_TH",
-    type: "website",
-  },
-};
+  const goTo = (p: number) => {
+    setPage(p);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
-export default async function ArticlesPage() {
-  const posts = await getPosts();
+  const pageNums = (): (number | "…")[] => {
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    if (page <= 4) return [1, 2, 3, 4, 5, "…", totalPages];
+    if (page >= totalPages - 3) return [1, "…", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    return [1, "…", page - 1, page, page + 1, "…", totalPages];
+  };
 
   return (
     <>
       <CloneNavbar />
-      <GSAPAnimations />
       <main>
 
         {/* Banner */}
-        <section className="relative overflow-hidden py-16 lg:py-20"
-          style={{ background: "linear-gradient(135deg, #F5E6BE 0%, #EDD49E 40%, #F0DDB8 70%, #F8EDD3 100%)" }}>
+        <section
+          className="relative overflow-hidden py-16 lg:py-20"
+          style={{ background: "linear-gradient(135deg, #F5E6BE 0%, #EDD49E 40%, #F0DDB8 70%, #F8EDD3 100%)" }}
+        >
           <div className="bg-dots absolute inset-0 pointer-events-none z-0 opacity-30" />
-          <div data-blob
-            className="pointer-events-none absolute top-0 right-0 w-[500px] h-[500px] rounded-full z-0"
-            style={{ background: "radial-gradient(circle, rgba(201,169,110,0.30) 0%, transparent 70%)", filter: "blur(100px)" }}
-          />
           <div className="relative z-10 max-w-6xl mx-auto px-5 text-center">
-            <Reveal>
-              <span className="sec-badge mb-4">บทความ</span>
-              <h1 className="font-black text-ink mt-4 mb-4" style={{ fontSize: "clamp(36px,5vw,60px)" }}>
-                ข้อมูล{" "}
-                <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">
-                  น่ารู้
-                </span>
-              </h1>
-              <p className="text-ink-muted text-base lg:text-lg max-w-xl mx-auto leading-relaxed">
-                บทความและข้อมูลเกี่ยวกับบริการแม่บ้าน พี่เลี้ยงเด็ก และการดูแลบ้าน
-              </p>
-            </Reveal>
+            <span className="sec-badge mb-4">บทความ</span>
+            <h1 className="font-black text-ink mt-4 mb-4" style={{ fontSize: "clamp(36px,5vw,60px)" }}>
+              ข้อมูล{" "}
+              <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">
+                น่ารู้
+              </span>
+            </h1>
+            <p className="text-ink-muted text-base lg:text-lg max-w-xl mx-auto leading-relaxed">
+              บทความและข้อมูลเกี่ยวกับบริการแม่บ้าน พี่เลี้ยงเด็ก และการดูแลบ้าน
+            </p>
           </div>
         </section>
 
@@ -110,42 +94,96 @@ export default async function ArticlesPage() {
         <section className="relative bg-white overflow-hidden py-12 lg:py-16">
           <div className="bg-grid absolute inset-0 pointer-events-none z-0 opacity-60" />
           <div className="relative z-10 max-w-6xl mx-auto px-5">
-            {posts.length === 0 ? (
+
+            {posts === null ? (
+              <div className="flex justify-center py-24">
+                <div className="w-10 h-10 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
+              </div>
+            ) : posts.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-ink-muted text-base">ไม่พบบทความในขณะนี้</p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-5">
-                {posts.map((post, i) => {
-                  const media = post._embedded?.["wp:featuredmedia"]?.[0];
-                  const imgSrc = media?.source_url ?? "";
-                  const title = decodeHtml(post.title.rendered);
-                  const excerpt = decodeHtml(post.excerpt?.rendered ?? "");
-                  return (
-                    <Reveal key={post.id} delay={i * 40}>
-                      <Link
-                        href={`/articles/${post.slug}`}
-                        className="art-card"
-                      >
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-5 mb-12">
+                  {posts.map((post) => {
+                    const media = post._embedded?.["wp:featuredmedia"]?.[0];
+                    const imgSrc = media?.source_url ?? "";
+                    const title = decodeHtml(post.title.rendered);
+                    const excerpt = decodeHtml(post.excerpt?.rendered ?? "");
+                    return (
+                      <Link key={post.id} href={`/articles/${post.slug}`} className="art-card">
                         <div className="overflow-hidden">
                           {imgSrc && (
-                            <Image src={imgSrc} alt={media?.alt_text || title} width={800} height={450} className="art-img" style={{ height: "auto" }} />
+                            <Image
+                              src={imgSrc}
+                              alt={media?.alt_text || title}
+                              width={800}
+                              height={450}
+                              className="art-img"
+                              style={{ height: "auto" }}
+                              unoptimized
+                            />
                           )}
                         </div>
                         <div className="p-3.5 lg:p-4">
                           <span className="inline-flex items-center gap-1 bg-gold/10 text-gold-dark border border-gold/25 rounded-full px-2.5 py-0.5 text-[10px] font-bold mb-2">
                             ✦ {formatThaiDate(post.date)}
                           </span>
-                          <h4 className="text-xs lg:text-[13px] font-bold text-ink leading-[1.5] line-clamp-3 mb-1">{title}</h4>
+                          <h2 className="text-xs lg:text-[13px] font-bold text-ink leading-[1.5] line-clamp-3 mb-1">{title}</h2>
                           {excerpt && (
                             <p className="text-[11px] text-ink-muted leading-relaxed line-clamp-2">{excerpt}</p>
                           )}
                         </div>
                       </Link>
-                    </Reveal>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-1.5 flex-wrap">
+                    <button
+                      onClick={() => goTo(page - 1)}
+                      disabled={page === 1}
+                      className="flex items-center justify-center w-9 h-9 rounded-xl border border-[#EDE8DF] text-ink-muted hover:border-gold/50 hover:text-gold-dark disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+                      aria-label="หน้าก่อนหน้า"
+                    >
+                      <ChevronLeft size={16} />
+                    </button>
+
+                    {pageNums().map((n, i) =>
+                      n === "…" ? (
+                        <span key={`ellipsis-${i}`} className="w-9 h-9 flex items-center justify-center text-ink-muted text-sm select-none">
+                          …
+                        </span>
+                      ) : (
+                        <button
+                          key={n}
+                          onClick={() => goTo(n)}
+                          className={`w-9 h-9 rounded-xl text-sm font-bold transition-all duration-200 ${
+                            n === page
+                              ? "bg-gradient-to-br from-gold to-gold-dark text-white shadow-[0_4px_12px_rgba(201,169,110,0.40)]"
+                              : "border border-[#EDE8DF] text-ink hover:border-gold/50 hover:text-gold-dark"
+                          }`}
+                          aria-current={n === page ? "page" : undefined}
+                        >
+                          {n}
+                        </button>
+                      )
+                    )}
+
+                    <button
+                      onClick={() => goTo(page + 1)}
+                      disabled={page === totalPages}
+                      className="flex items-center justify-center w-9 h-9 rounded-xl border border-[#EDE8DF] text-ink-muted hover:border-gold/50 hover:text-gold-dark disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+                      aria-label="หน้าถัดไป"
+                    >
+                      <ChevronRight size={16} />
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </section>
