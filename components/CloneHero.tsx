@@ -45,7 +45,7 @@ export default function CloneHero() {
   return (
     <section style={{ position: "relative", lineHeight: 0 }}>
       <Image
-        src="/images/bg_header.png"
+        src="/images/bg_header.webp"
         alt="แม่บ้านดีดี เซอร์วิส"
         width={1920}
         height={800}
@@ -157,10 +157,10 @@ export default function CloneHero() {
           }}
         >
           ที่มีคุณภาพและมากประสบการณ์
-          <label style={{ color: "#FF0080", fontWeight: 700 }}>
+          <span style={{ color: "#FF0080", fontWeight: 700 }}>
             {" "}
             พร้อมจัดส่งทั่วประเทศไทย
-          </label>
+          </span>
         </p>
 
         {/* Divider */}

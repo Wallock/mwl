@@ -38,7 +38,7 @@
   body {
     background: var(--surface);
     color: var(--text);
-    font-family: "Google Sans", "Anuphan", sans-serif;
+    font-family: var(--font-anuphan), "Anuphan", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
@@ -48,7 +48,7 @@
   }
 
   h1, h2, h3, h4, h5 {
-    font-family: "Google Sans", "Anuphan", sans-serif;
+    font-family: var(--font-anuphan), "Anuphan", sans-serif;
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
@@ -381,3 +381,20 @@
   animation: logo-shine 3.2s ease-in-out infinite;
   pointer-events: none;
 }
+
+/* ── Article detail WP content ── */
+.wp-article { font-size: 15px; line-height: 1.85; color: #2C2420; }
+.wp-article h2 { font-size: clamp(18px,2.5vw,24px); font-weight: 800; color: #1A1410; margin: 2em 0 0.6em; line-height: 1.4; }
+.wp-article h3 { font-size: clamp(16px,2vw,20px); font-weight: 700; color: #1A1410; margin: 1.6em 0 0.5em; }
+.wp-article p { margin: 0 0 1.2em; }
+.wp-article ul, .wp-article ol { margin: 0 0 1.2em 1.4em; }
+.wp-article li { margin-bottom: 0.4em; }
+.wp-article strong { font-weight: 700; color: #1A1410; }
+.wp-article a { color: #9E7D48; text-decoration: underline; text-underline-offset: 3px; }
+.wp-article a:hover { color: #C9A96E; }
+.wp-article img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.2em 0; }
+.wp-article blockquote { border-left: 3px solid #C9A96E; padding: 0.5em 1em; margin: 1.5em 0; color: #6B5B45; font-style: italic; background: #FBF8F2; border-radius: 0 8px 8px 0; }
+.wp-article table { width: 100%; border-collapse: collapse; margin: 1.5em 0; font-size: 14px; }
+.wp-article th { background: #F5E6BE; padding: 8px 12px; text-align: left; font-weight: 700; border: 1px solid #EDE8DF; }
+.wp-article td { padding: 8px 12px; border: 1px solid #EDE8DF; }
+.wp-article tr:nth-child(even) td { background: #FAFAF9; }

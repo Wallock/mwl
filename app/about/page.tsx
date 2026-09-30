@@ -1,3 +1,4 @@
+import Image from "next/image";
 import CloneNavbar from "@/components/CloneNavbar";
 import CloneFooter from "@/components/CloneFooter";
 import GSAPAnimations from "@/components/GSAPAnimations";
@@ -30,7 +31,17 @@ const dscPhotos = [
 
 export const metadata = {
   title: "เกี่ยวกับเรา | แม่บ้านดีดี เซอร์วิส",
-  description: "หจก.จัดหางานแม่บ้านดีดี เซอร์วิส บริการจัดหาแม่บ้านคุณภาพ มีใบอนุญาตถูกต้อง ประสบการณ์กว่า 20 ปี รีวิวมากกว่า 95,000 รีวิว",
+  description: "หจก.จัดหางานแม่บ้านดีดี เซอร์วิส ผู้นำจัดหาแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ มีใบอนุญาตถูกต้อง ประสบการณ์กว่า 20 ปี รีวิวกว่า 95,000 รีวิว โทร 061-843-7666",
+  alternates: { canonical: "https://www.maidwonderland.com/about" },
+  openGraph: {
+    title: "เกี่ยวกับเรา | แม่บ้านดีดี เซอร์วิส",
+    description: "หจก.จัดหางานแม่บ้านดีดี เซอร์วิส ผู้นำจัดหาแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ มีใบอนุญาตถูกต้อง ประสบการณ์กว่า 20 ปี รีวิวกว่า 95,000 รีวิว โทร 061-843-7666",
+    url: "https://www.maidwonderland.com/about",
+    siteName: "แม่บ้านดีดี เซอร์วิส",
+    images: [{ url: "/images/bg_header.webp", width: 1920, height: 800, alt: "แม่บ้านดีดี เซอร์วิส" }],
+    locale: "th_TH",
+    type: "website",
+  },
 };
 
 export default function AboutPage() {
@@ -173,11 +184,13 @@ export default function AboutPage() {
               {dscPhotos.map(({ src, alt }, i) => (
                 <Reveal key={i} delay={i * 60}>
                   <div className="group overflow-hidden rounded-xl border border-[#EDE8DF] shadow-[0_4px_24px_rgba(100,60,0,0.06)] hover:shadow-[0_10px_36px_rgba(100,60,0,0.13)] transition-all duration-300">
-                    <img
+                    <Image
                       src={src}
                       alt={alt}
+                      width={400}
+                      height={400}
                       className="w-full block object-cover transition-transform duration-500 group-hover:scale-105"
-                      style={{ aspectRatio: "1/1" }}
+                      style={{ aspectRatio: "1/1", height: "auto" }}
                     />
                   </div>
                 </Reveal>
@@ -211,8 +224,7 @@ export default function AboutPage() {
                     boxShadow: "0 4px 16px rgba(243,0,60,0.30)",
                   }}>
                     <span style={{ background: "#C4006A", padding: "10px 12px", display: "flex", alignItems: "center" }}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="/icon/calling-icon.svg" alt="โทร" width={18} height={18} style={{ filter: "brightness(0) invert(1)" }} />
+                      <Image src="/icon/calling-icon.svg" alt="โทร" width={18} height={18} style={{ filter: "brightness(0) invert(1)", width: 18, height: 18 }} />
                     </span>
                     <span style={{ background: "linear-gradient(180deg,#FF00CB 0%,#F3003C 100%)", padding: "10px 16px", fontWeight: 700, fontSize: 13, color: "#fff" }}>
                       061-843-7666
@@ -224,8 +236,7 @@ export default function AboutPage() {
                     boxShadow: "0 4px 16px rgba(6,109,0,0.30)",
                   }}>
                     <span style={{ background: "#04520A", padding: "10px 12px", display: "flex", alignItems: "center" }}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="/icon/line-icon.svg" alt="LINE" width={18} height={18} />
+                      <Image src="/icon/line-icon.svg" alt="LINE" width={18} height={18} style={{ width: 18, height: 18 }} />
                     </span>
                     <span style={{ background: "linear-gradient(180deg,#3EB600 0%,#066D00 100%)", padding: "10px 16px", fontWeight: 700, fontSize: 13, color: "#fff" }}>
                       LINE @dede1721

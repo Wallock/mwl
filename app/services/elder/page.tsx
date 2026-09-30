@@ -1,3 +1,4 @@
+import Image from "next/image";
 import CloneNavbar from "@/components/CloneNavbar";
 import CloneFooter from "@/components/CloneFooter";
 import GSAPAnimations from "@/components/GSAPAnimations";
@@ -23,7 +24,17 @@ const guarantees = [
 
 export const metadata = {
   title: "บริการดูแลผู้สูงอายุ | แม่บ้านดีดี เซอร์วิส",
-  description: "บริการจัดหาผู้ดูแลผู้สูงอายุ ผ่านการอบรมเฉพาะทาง ตรวจโรค ตรวจประวัติ ราคา 12,000–16,000 บาท/เดือน",
+  description: "บริการจัดหาผู้ดูแลผู้สูงอายุ ผ่านการอบรมเฉพาะทาง ตรวจโรค ตรวจประวัติ ราคา 12,000–16,000 บาท/เดือน โทร 061-843-7666",
+  alternates: { canonical: "https://www.maidwonderland.com/services/elder" },
+  openGraph: {
+    title: "บริการดูแลผู้สูงอายุ | แม่บ้านดีดี เซอร์วิส",
+    description: "บริการจัดหาผู้ดูแลผู้สูงอายุ ผ่านการอบรมเฉพาะทาง ตรวจโรค ตรวจประวัติ ราคา 12,000–16,000 บาท/เดือน โทร 061-843-7666",
+    url: "https://www.maidwonderland.com/services/elder",
+    siteName: "แม่บ้านดีดี เซอร์วิส",
+    images: [{ url: "/images/bg_header.webp", width: 1920, height: 800, alt: "แม่บ้านดีดี เซอร์วิส" }],
+    locale: "th_TH",
+    type: "website",
+  },
 };
 
 export default function ElderServicePage() {
@@ -80,8 +91,7 @@ export default function ElderServicePage() {
                     boxShadow: "0 4px 16px rgba(243,0,60,0.35)",
                   }}>
                     <span style={{ background: "#C4006A", padding: "12px 14px", display: "flex", alignItems: "center" }}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="/icon/calling-icon.svg" alt="โทร" width={22} height={22} style={{ filter: "brightness(0) invert(1)" }} />
+                      <Image src="/icon/calling-icon.svg" alt="โทร" width={22} height={22} style={{ filter: "brightness(0) invert(1)", width: 22, height: 22 }} />
                     </span>
                     <span style={{ background: "linear-gradient(180deg,#FF00CB 0%,#F3003C 100%)", padding: "12px 18px", fontWeight: 700, fontSize: 14, color: "#fff" }}>
                       โทรสอบถามเลย
@@ -93,8 +103,7 @@ export default function ElderServicePage() {
                     boxShadow: "0 4px 16px rgba(6,109,0,0.35)",
                   }}>
                     <span style={{ background: "#04520A", padding: "12px 14px", display: "flex", alignItems: "center" }}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="/icon/line-icon.svg" alt="LINE" width={22} height={22} />
+                      <Image src="/icon/line-icon.svg" alt="LINE" width={22} height={22} style={{ width: 22, height: 22 }} />
                     </span>
                     <span style={{ background: "linear-gradient(180deg,#3EB600 0%,#066D00 100%)", padding: "12px 18px", fontWeight: 700, fontSize: 14, color: "#fff" }}>
                       แอด LINE
@@ -105,7 +114,7 @@ export default function ElderServicePage() {
               <Reveal delay={120}>
                 <div className="rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(100,60,0,0.18)]"
                   style={{ border: "1.5px solid rgba(201,169,110,0.35)" }}>
-                  <img src={IMG.elder} alt="ดูแลผู้สูงอายุ" className="w-full block object-cover" style={{ aspectRatio: "4/3" }} />
+                  <Image src={IMG.elder} alt="ดูแลผู้สูงอายุ" width={800} height={600} className="w-full block object-cover" style={{ aspectRatio: "4/3", height: "auto", width: "100%" }} priority />
                 </div>
               </Reveal>
             </div>

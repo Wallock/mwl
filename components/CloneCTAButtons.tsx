@@ -51,7 +51,7 @@ export default function CloneCTAButtons() {
                   style={{ background: "rgba(201,169,110,0.20)", animationDuration: "2.4s" }} />
                 <div className="relative w-16 h-16 rounded-2xl flex items-center justify-center shadow-md"
                   style={{ background: "linear-gradient(135deg,#C9A96E 0%,#9E7D48 100%)" }}>
-                  <Image src="/icon/calling-icon.svg" alt="โทร" width={32} height={32} style={{ filter: "brightness(0) invert(1)" }} />
+                  <Image src="/icon/calling-icon.svg" alt="โทร" width={32} height={32} style={{ filter: "brightness(0) invert(1)", width: 32, height: 32 }} />
                 </div>
               </div>
 
@@ -85,7 +85,7 @@ export default function CloneCTAButtons() {
                   style={{ background: "rgba(212,87,110,0.18)", animationDuration: "2.4s", animationDelay: "0.8s" }} />
                 <div className="relative w-16 h-16 rounded-2xl flex items-center justify-center shadow-md"
                   style={{ background: "linear-gradient(135deg,#D4576E 0%,#B03255 100%)" }}>
-                  <Image src="/icon/line-icon.svg" alt="LINE" width={32} height={32} />
+                  <Image src="/icon/line-icon.svg" alt="LINE" width={32} height={32} style={{ width: 32, height: 32 }} />
                 </div>
               </div>
 

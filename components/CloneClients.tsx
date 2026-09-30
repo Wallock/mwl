@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { IMG } from "@/lib/images";
 import Reveal from "./Reveal";
 
@@ -36,12 +37,15 @@ export default function CloneClients() {
         <Reveal delay={120}>
           <div className="flex flex-wrap justify-center items-center gap-6 lg:gap-10">
             {logos.map((l, i) => (
-              <img
+              <Image
                 key={i}
                 src={l.src}
                 alt={l.alt}
+                width={0}
+                height={0}
+                sizes="120px"
                 className="client-logo"
-                style={{ height: 40 }}
+                style={{ height: "44px", width: "auto" }}
               />
             ))}
           </div>

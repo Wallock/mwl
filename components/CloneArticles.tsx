@@ -1,11 +1,14 @@
+import Image from "next/image";
+import Link from "next/link";
+
 const BASE = "https://www.maidwonderland.com";
 const API = `${BASE}/wp-json/wp/v2/posts?page=1&per_page=8&_embed`;
 
 interface WPPost {
   id: number;
+  slug: string;
   title: { rendered: string };
   date: string;
-  link: string;
   _embedded?: {
     "wp:featuredmedia"?: Array<{ source_url: string; alt_text: string }>;
   };
@@ -20,15 +23,9 @@ function formatThaiDate(iso: string) {
 async function getPosts(): Promise<WPPost[]> {
   try {
     const res = await fetch(API, { next: { revalidate: 3600 } });
-    if (!res.ok) {
-      console.error("[CloneArticles] fetch failed:", res.status, res.statusText);
-      return [];
-    }
-    const data = await res.json();
-    console.log("[CloneArticles] fetched posts:", data.length);
-    return data;
-  } catch (e) {
-    console.error("[CloneArticles] fetch error:", e);
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
     return [];
   }
 }
@@ -56,18 +53,20 @@ export default async function CloneArticles() {
           {posts.map((post, i) => {
             const media = post._embedded?.["wp:featuredmedia"]?.[0];
             const imgSrc = media?.source_url ?? "";
-            const title = post.title.rendered.replace(/&amp;/g, "&").replace(/&#8217;/g, "'").replace(/&#8220;/g, '"').replace(/&#8221;/g, '"');
+            const title = post.title.rendered
+              .replace(/&amp;/g, "&")
+              .replace(/&#8217;/g, "'")
+              .replace(/&#8220;/g, '"')
+              .replace(/&#8221;/g, '"');
             return (
-              <a
+              <Link
                 key={post.id}
-                href={post.link}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={`/articles/${post.slug}`}
                 className={`art-card${i >= 4 ? " hidden sm:block" : ""}`}
               >
                 <div className="overflow-hidden">
                   {imgSrc && (
-                    <img src={imgSrc} alt={media?.alt_text || title} className="art-img" />
+                    <Image src={imgSrc} alt={media?.alt_text || title} width={800} height={450} className="art-img" style={{ height: "auto" }} />
                   )}
                 </div>
                 <div className="p-3.5 lg:p-4">
@@ -76,15 +75,15 @@ export default async function CloneArticles() {
                   </span>
                   <h4 className="text-xs lg:text-[13px] font-bold text-ink leading-[1.5] line-clamp-3">{title}</h4>
                 </div>
-              </a>
+              </Link>
             );
           })}
         </div>
 
         <div className="text-center mt-10">
-          <a href="/articles" className="btn-pink">
+          <Link href="/articles" className="btn-pink">
             ดูบทความทั้งหมด →
-          </a>
+          </Link>
         </div>
       </div>
     </section>

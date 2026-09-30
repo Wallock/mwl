@@ -1,3 +1,5 @@
+import Image from "next/image";
+import Link from "next/link";
 import CloneNavbar from "@/components/CloneNavbar";
 import CloneFooter from "@/components/CloneFooter";
 import GSAPAnimations from "@/components/GSAPAnimations";
@@ -8,6 +10,7 @@ const API = `${BASE}/wp-json/wp/v2/posts?page=1&per_page=20&_embed`;
 
 interface WPPost {
   id: number;
+  slug: string;
   title: { rendered: string };
   date: string;
   link: string;
@@ -45,7 +48,17 @@ async function getPosts(): Promise<WPPost[]> {
 
 export const metadata = {
   title: "บทความ | แม่บ้านดีดี เซอร์วิส",
-  description: "บทความน่ารู้เกี่ยวกับการจ้างแม่บ้าน พี่เลี้ยงเด็ก และการดูแลบ้าน จากแม่บ้านดีดี เซอร์วิส",
+  description: "บทความและคู่มือน่ารู้เกี่ยวกับการจ้างแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ และดูแลบ้าน จากผู้เชี่ยวชาญแม่บ้านดีดี เซอร์วิส กว่า 20 ปี",
+  alternates: { canonical: "https://www.maidwonderland.com/articles" },
+  openGraph: {
+    title: "บทความ | แม่บ้านดีดี เซอร์วิส",
+    description: "บทความและคู่มือน่ารู้เกี่ยวกับการจ้างแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ และดูแลบ้าน จากผู้เชี่ยวชาญแม่บ้านดีดี เซอร์วิส กว่า 20 ปี",
+    url: "https://www.maidwonderland.com/articles",
+    siteName: "แม่บ้านดีดี เซอร์วิส",
+    images: [{ url: "/images/bg_header.webp", width: 1920, height: 800, alt: "แม่บ้านดีดี เซอร์วิส" }],
+    locale: "th_TH",
+    type: "website",
+  },
 };
 
 export default async function ArticlesPage() {
@@ -98,15 +111,13 @@ export default async function ArticlesPage() {
                   const excerpt = decodeHtml(post.excerpt?.rendered ?? "");
                   return (
                     <Reveal key={post.id} delay={i * 40}>
-                      <a
-                        href={post.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <Link
+                        href={`/articles/${post.slug}`}
                         className="art-card"
                       >
                         <div className="overflow-hidden">
                           {imgSrc && (
-                            <img src={imgSrc} alt={media?.alt_text || title} className="art-img" />
+                            <Image src={imgSrc} alt={media?.alt_text || title} width={800} height={450} className="art-img" style={{ height: "auto" }} />
                           )}
                         </div>
                         <div className="p-3.5 lg:p-4">
@@ -118,7 +129,7 @@ export default async function ArticlesPage() {
                             <p className="text-[11px] text-ink-muted leading-relaxed line-clamp-2">{excerpt}</p>
                           )}
                         </div>
-                      </a>
+                      </Link>
                     </Reveal>
                   );
                 })}

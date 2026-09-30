@@ -8,7 +8,17 @@ import { MapPin, Clock } from "lucide-react";
 
 export const metadata = {
   title: "ติดต่อเรา | แม่บ้านดีดี เซอร์วิส",
-  description: "ติดต่อแม่บ้านดีดี เซอร์วิส โทร 061-843-7666 หรือ LINE @dede1721 เปิดทุกวัน 08:00–20:00 น.",
+  description: "ติดต่อแม่บ้านดีดี เซอร์วิส จัดหาแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ โทร 061-843-7666 LINE @dede1721 เปิดให้บริการทุกวัน 08:00–20:00 น.",
+  alternates: { canonical: "https://www.maidwonderland.com/contact" },
+  openGraph: {
+    title: "ติดต่อเรา | แม่บ้านดีดี เซอร์วิส",
+    description: "ติดต่อแม่บ้านดีดี เซอร์วิส จัดหาแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ โทร 061-843-7666 LINE @dede1721 เปิดให้บริการทุกวัน 08:00–20:00 น.",
+    url: "https://www.maidwonderland.com/contact",
+    siteName: "แม่บ้านดีดี เซอร์วิส",
+    images: [{ url: "/images/bg_header.webp", width: 1920, height: 800, alt: "แม่บ้านดีดี เซอร์วิส" }],
+    locale: "th_TH",
+    type: "website",
+  },
 };
 
 export default function ContactPage() {
@@ -65,7 +75,7 @@ export default function ContactPage() {
                       style={{ background: "rgba(201,169,110,0.20)", animationDuration: "2.4s" }} />
                     <div className="relative w-14 h-14 rounded-2xl flex items-center justify-center shadow-md"
                       style={{ background: "linear-gradient(135deg,#C9A96E 0%,#9E7D48 100%)" }}>
-                      <img src="/icon/calling-icon.svg" alt="โทร" width={28} height={28} style={{ filter: "brightness(0) invert(1)" }} />
+                      <Image src="/icon/calling-icon.svg" alt="โทร" width={28} height={28} style={{ filter: "brightness(0) invert(1)", width: 28, height: 28 }} />
                     </div>
                   </div>
                   <div>
@@ -88,7 +98,7 @@ export default function ContactPage() {
                       style={{ background: "rgba(212,87,110,0.18)", animationDuration: "2.4s", animationDelay: "0.8s" }} />
                     <div className="relative w-14 h-14 rounded-2xl flex items-center justify-center shadow-md"
                       style={{ background: "linear-gradient(135deg,#D4576E 0%,#B03255 100%)" }}>
-                      <img src="/icon/line-icon.svg" alt="LINE" width={28} height={28} />
+                      <Image src="/icon/line-icon.svg" alt="LINE" width={28} height={28} style={{ width: 28, height: 28 }} />
                     </div>
                   </div>
                   <div>

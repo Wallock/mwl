@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IMG } from "@/lib/images";
@@ -14,9 +14,21 @@ const serviceLinks = [
 export default function CloneNavbar() {
   const [open, setOpen] = useState(false);
   const [svcOpen, setSvcOpen] = useState(false);
+  const svcTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const onSvcEnter = () => {
+    if (svcTimer.current) clearTimeout(svcTimer.current);
+    setSvcOpen(true);
+  };
+  const onSvcLeave = () => {
+    svcTimer.current = setTimeout(() => setSvcOpen(false), 150);
+  };
 
   return (
-    <nav style={{ position: "sticky", top: 0, zIndex: 100 }}>
+    <>
+    <div aria-hidden="true" style={{ height: 0, overflow: "hidden" }} />
+    <div style={{ position: "sticky", top: 0, zIndex: 100 }}>
+    <nav>
 
       {/* ── Header bar (gold bg) ── */}
       <div style={{
@@ -39,7 +51,7 @@ export default function CloneNavbar() {
             padding: "6px 14px 6px 8px",
             boxShadow: "0 2px 12px rgba(201,169,110,0.25), inset 0 1px 0 rgba(255,255,255,0.8)",
           }}>
-            <Image src={IMG.logo} alt="โลโก้แม่บ้านดีดี" height={52} width={160} style={{ height: 46, width: "auto" }} />
+            <Image src={IMG.logo} alt="โลโก้แม่บ้านดีดี" width={0} height={0} sizes="160px" style={{ height: "46px", width: "auto" }} />
             <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.25, fontFamily: '"Anuphan", sans-serif' }}>
               <span style={{ fontWeight: 700, fontSize: 18, color: "#1A1410" }}>แม่บ้านดีดีเซอร์วิส</span>
               <span style={{ fontWeight: 300, fontSize: 12, color: "#9E7D48" }}>ผู้ให้บริการจัดส่งแม่บ้านลำดับ 1</span>
@@ -51,7 +63,7 @@ export default function CloneNavbar() {
             <Link href="/" className="c-nav-link">หน้าแรก</Link>
             <Link href="/about" className="c-nav-link">เกี่ยวกับเรา</Link>
 
-            <div className="relative" onMouseEnter={() => setSvcOpen(true)} onMouseLeave={() => setSvcOpen(false)}>
+            <div className="relative" onMouseEnter={onSvcEnter} onMouseLeave={onSvcLeave}>
               <button
                 className="c-nav-link"
                 style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", gap: 5 }}
@@ -60,12 +72,15 @@ export default function CloneNavbar() {
                 <span style={{ fontSize: 9, color: "#B0A090", display: "inline-block", transition: "transform 0.2s", transform: svcOpen ? "rotate(180deg)" : "none" }}>▾</span>
               </button>
               {svcOpen && (
-                <div style={{
-                  position: "absolute", top: "calc(100% + 14px)", left: "50%", transform: "translateX(-50%)",
-                  background: "#FEFDF9", borderRadius: 16, padding: "8px", minWidth: 220, zIndex: 200,
-                  border: "1px solid rgba(201,169,110,0.22)",
-                  boxShadow: "0 16px 56px rgba(26,20,16,0.12), 0 4px 16px rgba(201,169,110,0.10)",
-                }}>
+                <div
+                  onMouseEnter={onSvcEnter}
+                  onMouseLeave={onSvcLeave}
+                  style={{
+                    position: "absolute", top: "calc(100% + 4px)", left: "50%", transform: "translateX(-50%)",
+                    background: "#FEFDF9", borderRadius: 16, padding: "8px", minWidth: 220, zIndex: 200,
+                    border: "1px solid rgba(201,169,110,0.22)",
+                    boxShadow: "0 16px 56px rgba(26,20,16,0.12), 0 4px 16px rgba(201,169,110,0.10)",
+                  }}>
                   {serviceLinks.map((sl) => (
                     <a key={sl.label} href={sl.href}
                       style={{ display: "block", padding: "10px 16px", color: "#1A1410", textDecoration: "none", fontSize: 14, borderRadius: 10, fontWeight: 500, transition: "background 0.15s, color 0.15s" }}
@@ -97,7 +112,7 @@ export default function CloneNavbar() {
                   padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "center",
                   flexShrink: 0,
                 }}>
-                  <Image src="/icon/calling-icon.svg" alt="โทร" width={28} height={28} style={{ filter: "brightness(0) invert(1)" }} />
+                  <Image src="/icon/calling-icon.svg" alt="โทร" width={28} height={28} style={{ filter: "brightness(0) invert(1)", width: 28, height: 28 }} />
                 </div>
                 <div style={{
                   flex: 1, background: "linear-gradient(180deg, #FF00CB 0%, #F3003C 100%)",
@@ -121,7 +136,7 @@ export default function CloneNavbar() {
                   padding: "12px 14px", display: "flex", alignItems: "start", justifyContent: "center",
                   flexShrink: 0,
                 }}>
-                  <Image src="/icon/line-icon.svg" alt="LINE" width={28} height={28} />
+                  <Image src="/icon/line-icon.svg" alt="LINE" width={28} height={28} style={{ width: 28, height: 28 }} />
                 </div>
                 <div style={{
                   flex: 1, background: "linear-gradient(180deg, #3EB600 0%, #066D00 100%)",
@@ -137,6 +152,7 @@ export default function CloneNavbar() {
 
           {/* Mobile toggle */}
           <button onClick={() => setOpen(!open)} className="lg:hidden absolute right-5"
+            aria-label={open ? "ปิดเมนู" : "เปิดเมนู"}
             style={{ background: "none", border: "1px solid rgba(201,169,110,0.30)", cursor: "pointer", fontSize: 16, color: "#1A1410", padding: "7px 12px", borderRadius: 10, lineHeight: 1 }}>
             {open ? "✕" : "☰"}
           </button>
@@ -202,7 +218,7 @@ export default function CloneNavbar() {
                   padding: "12px 14px", display: "flex", alignItems: "center", justifyContent: "center",
                   flexShrink: 0,
                 }}>
-                  <Image src="/icon/calling-icon.svg" alt="โทร" width={28} height={28} style={{ filter: "brightness(0) invert(1)" }} />
+                  <Image src="/icon/calling-icon.svg" alt="โทร" width={28} height={28} style={{ filter: "brightness(0) invert(1)", width: 28, height: 28 }} />
                 </div>
                 <div style={{
                   flex: 1, background: "linear-gradient(180deg, #FF00CB 0%, #F3003C 100%)",
@@ -226,7 +242,7 @@ export default function CloneNavbar() {
                   padding: "12px 14px", display: "flex", alignItems: "start", justifyContent: "center",
                   flexShrink: 0,
                 }}>
-                  <Image src="/icon/line-icon.svg" alt="LINE" width={28} height={28} />
+                  <Image src="/icon/line-icon.svg" alt="LINE" width={28} height={28} style={{ width: 28, height: 28 }} />
                 </div>
                 <div style={{
                   flex: 1, background: "linear-gradient(180deg, #3EB600 0%, #066D00 100%)",
@@ -244,5 +260,7 @@ export default function CloneNavbar() {
         )}
 
     </nav>
+    </div>
+    </>
   );
 }

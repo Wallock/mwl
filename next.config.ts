@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "www.maidwonderland.com" },
     ],
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
   },
 };
 

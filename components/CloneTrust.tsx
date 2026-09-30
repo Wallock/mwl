@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { IMG } from "@/lib/images";
 import Reveal from "./Reveal";
 import { Check, Phone, MessageCircle } from "lucide-react";
+import LicenseLightbox from "./LicenseLightbox";
 
 const sliderImages = [1,2,3,4,5,6,7,8,9].map(n => `/images/silde/${n}-300x200.webp`);
 
@@ -17,15 +19,17 @@ export default function CloneTrust() {
   return (
     <section className="relative bg-[#FAFAF9] overflow-hidden">
 
-      {/* Infinite scroll strip */}
-      <div style={{ overflow: "hidden", lineHeight: 0 }}>
+      {/* Infinite scroll strip — decorative */}
+      <div aria-hidden="true" style={{ overflow: "hidden", lineHeight: 0 }}>
         <div className="marquee-track">
           {[...Array(2)].map((_, pass) =>
             sliderImages.map((src, i) => (
-              <img
+              <Image
                 key={`${pass}-${i}`}
                 src={src}
                 alt=""
+                width={300}
+                height={200}
                 style={{ height: 180, width: "auto", objectFit: "cover", flexShrink: 0, display: "block" }}
               />
             ))
@@ -107,15 +111,7 @@ export default function CloneTrust() {
           <Reveal delay={200} className="flex flex-col items-center gap-7 lg:gap-9">
 
             {/* Floating license image */}
-            <div className="relative w-full max-w-[220px] lg:max-w-[260px] animate-float">
-              <div className="absolute -inset-4 rounded-3xl blur-2xl bg-gradient-to-br from-gold/20 to-gold-dark/10" />
-              <div className="relative p-1.5 rounded-3xl border border-gold/30 bg-gradient-to-br from-gold/25 to-gold/5 shadow-xl">
-                <img src={IMG.license} alt="ใบอนุญาตจัดหางาน" className="w-full rounded-2xl block" />
-              </div>
-              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gradient-to-r from-gold to-gold-dark text-white text-[10px] font-black tracking-wider uppercase px-3.5 py-1.5 rounded-full shadow-lg">
-                ใบอนุญาตจัดหางานถูกต้อง
-              </div>
-            </div>
+            <LicenseLightbox />
 
             {/* Stats */}
             <div className="grid grid-cols-3 w-full max-w-xs bg-white rounded-2xl overflow-hidden border border-[#EDE8DF] shadow-[0_4px_24px_rgba(100,60,0,0.06)] mt-2">
@@ -127,16 +123,6 @@ export default function CloneTrust() {
               ))}
             </div>
 
-            {/* CTA */}
-            <div className="flex flex-wrap gap-3 justify-center w-full">
-              <a href="tel:0618437666" className="btn-gold flex-1 justify-center min-w-[130px]" style={{ fontSize: 13, padding: "10px 16px" }}>
-                <Phone size={14} strokeWidth={2.5} /> โทรปรึกษาฟรี
-              </a>
-              <a href="https://line.me/ti/p/~@dede1721" target="_blank" rel="noopener noreferrer"
-                className="btn-pink flex-1 justify-center min-w-[130px]" style={{ fontSize: 13, padding: "10px 16px" }}>
-                <MessageCircle size={14} strokeWidth={2.5} /> LINE @dede1721
-              </a>
-            </div>
           </Reveal>
         </div>
       </div>

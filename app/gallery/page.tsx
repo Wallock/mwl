@@ -1,3 +1,4 @@
+import Image from "next/image";
 import CloneNavbar from "@/components/CloneNavbar";
 import CloneFooter from "@/components/CloneFooter";
 import GSAPAnimations from "@/components/GSAPAnimations";
@@ -6,7 +7,17 @@ import { IMG } from "@/lib/images";
 
 export const metadata = {
   title: "รูปกิจกรรม | แม่บ้านดีดี เซอร์วิส",
-  description: "ภาพกิจกรรมและบรรยากาศการทำงานของทีมงานแม่บ้านดีดี เซอร์วิส",
+  description: "ชมภาพกิจกรรม บรรยากาศการทำงาน และทีมงานแม่บ้านดีดี เซอร์วิส ผู้ให้บริการจัดหาแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ มากกว่า 20 ปี 95,000+ รีวิว",
+  alternates: { canonical: "https://www.maidwonderland.com/gallery" },
+  openGraph: {
+    title: "รูปกิจกรรม | แม่บ้านดีดี เซอร์วิส",
+    description: "ชมภาพกิจกรรม บรรยากาศการทำงาน และทีมงานแม่บ้านดีดี เซอร์วิส ผู้ให้บริการจัดหาแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ มากกว่า 20 ปี 95,000+ รีวิว",
+    url: "https://www.maidwonderland.com/gallery",
+    siteName: "แม่บ้านดีดี เซอร์วิส",
+    images: [{ url: "/images/bg_header.webp", width: 1920, height: 800, alt: "แม่บ้านดีดี เซอร์วิส" }],
+    locale: "th_TH",
+    type: "website",
+  },
 };
 
 export default function GalleryPage() {
@@ -58,11 +69,13 @@ export default function GalleryPage() {
               {photos.map((src, i) => (
                 <Reveal key={i} delay={i * 55}>
                   <div className="group overflow-hidden rounded-xl border border-[#EDE8DF] shadow-[0_4px_24px_rgba(100,60,0,0.06)] hover:shadow-[0_10px_36px_rgba(100,60,0,0.13)] transition-all duration-300 relative">
-                    <img
+                    <Image
                       src={src}
                       alt={`กิจกรรม ${i + 1}`}
+                      width={400}
+                      height={300}
                       className="w-full block object-cover transition-transform duration-500 group-hover:scale-105"
-                      style={{ aspectRatio: "4/3" }}
+                      style={{ aspectRatio: "4/3", height: "auto" }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
                   </div>
@@ -84,8 +97,7 @@ export default function GalleryPage() {
                   boxShadow: "0 4px 16px rgba(243,0,60,0.35)",
                 }}>
                   <span style={{ background: "#C4006A", padding: "12px 14px", display: "flex", alignItems: "center" }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/icon/calling-icon.svg" alt="โทร" width={22} height={22} style={{ filter: "brightness(0) invert(1)" }} />
+                    <Image src="/icon/calling-icon.svg" alt="โทร" width={22} height={22} style={{ filter: "brightness(0) invert(1)", width: 22, height: 22 }} />
                   </span>
                   <span style={{ background: "linear-gradient(180deg,#FF00CB 0%,#F3003C 100%)", padding: "12px 18px", fontWeight: 700, fontSize: 14, color: "#fff" }}>
                     061-843-7666
@@ -97,8 +109,7 @@ export default function GalleryPage() {
                   boxShadow: "0 4px 16px rgba(6,109,0,0.35)",
                 }}>
                   <span style={{ background: "#04520A", padding: "12px 14px", display: "flex", alignItems: "center" }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/icon/line-icon.svg" alt="LINE" width={22} height={22} />
+                    <Image src="/icon/line-icon.svg" alt="LINE" width={22} height={22} style={{ width: 22, height: 22 }} />
                   </span>
                   <span style={{ background: "linear-gradient(180deg,#3EB600 0%,#066D00 100%)", padding: "12px 18px", fontWeight: 700, fontSize: 14, color: "#fff" }}>
                     LINE @dede1721

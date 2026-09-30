@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { IMG } from "@/lib/images";
 import Reveal from "./Reveal";
 import { Images } from "lucide-react";
@@ -43,11 +44,13 @@ export default function CloneGallery() {
           {photos.map((src, i) => (
             <Reveal key={i} delay={i * 55}>
               <div className="group overflow-hidden rounded-xl border border-[#EDE8DF] shadow-[0_4px_24px_rgba(100,60,0,0.06)] hover:shadow-[0_10px_36px_rgba(100,60,0,0.13)] transition-all duration-300 relative">
-                <img
+                <Image
                   src={src}
                   alt={`กิจกรรม ${i + 1}`}
+                  width={400}
+                  height={300}
                   className="w-full block object-cover transition-transform duration-500 group-hover:scale-105"
-                  style={{ aspectRatio: "4/3" }}
+                  style={{ aspectRatio: "4/3", height: "auto" }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
               </div>

@@ -1,7 +1,34 @@
+"use client";
+import { useEffect, useRef } from "react";
 
 export default function CloneReviews() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting) return;
+        observer.disconnect();
+
+        if (!document.querySelector('script[src*="elfsightcdn.com"]')) {
+          const s = document.createElement("script");
+          s.src = "https://static.elfsight.com/platform/platform.js";
+          s.async = true;
+          document.body.appendChild(s);
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="relative bg-[#FBF8F2] overflow-hidden py-12 lg:py-16">
+    <section className="relative bg-[#FBF8F2] overflow-hidden py-12 lg:py-16" ref={ref}>
 
       <div data-blob
         className="pointer-events-none absolute -top-20 -right-20 w-[460px] h-[460px] rounded-full z-0"
@@ -13,9 +40,7 @@ export default function CloneReviews() {
       />
 
       <div className="relative z-10 max-w-6xl mx-auto px-5">
-
-        {/* Elfsight Google Reviews widget */}
-        <div className="elfsight-app-4768500b-991c-41c0-98b8-c7de5620a9dc" />
+        <div className="elfsight-app-4768500b-991c-41c0-98b8-c7de5620a9dc" data-elfsight-app-lazy />
       </div>
     </section>
   );

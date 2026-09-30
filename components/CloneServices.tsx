@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { IMG } from "@/lib/images";
 import Reveal from "./Reveal";
 import { ArrowRight } from "lucide-react";
@@ -77,11 +78,14 @@ export default function CloneServices() {
                 style={{ textDecoration: "none" }}
               >
                 <div className="relative overflow-hidden">
-                  <img
+                  <Image
                     src={s.img}
                     alt={s.name}
+                    width={400}
+                    height={400}
                     className="w-full block object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                    style={{ aspectRatio: "1/1" }}
+                    style={{ aspectRatio: "1/1", height: "auto", width: "100%" }}
+                    priority={i === 0}
                   />
                   <span className={`absolute top-2.5 left-2.5 text-white text-[10px] font-bold px-2.5 py-1 rounded-full ${
                     s.gold
