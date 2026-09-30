@@ -45,7 +45,24 @@ function decodeHtml(str: string) {
     .replace(/&#8220;/g, '"')
     .replace(/&#8221;/g, '"')
     .replace(/&#8211;/g, "–")
-    .replace(/<[^>]+>/g, "");
+    .replace(/&hellip;/g, "")
+    .replace(/&#8230;/g, "")
+    .replace(/\[&hellip;\]/g, "")
+    .replace(/\[…\]/g, "")
+    .replace(/<[^>]+>/g, "")
+    .trim();
+}
+
+function seoTitle(raw: string): string {
+  const suffix = " | แม่บ้านดีดี เซอร์วิส";
+  const maxBody = 60 - suffix.length;
+  const body = raw.length > maxBody ? raw.slice(0, maxBody - 1) + "…" : raw;
+  return body + suffix;
+}
+
+function seoDesc(raw: string): string {
+  const clean = raw.replace(/\s+/g, " ").trim();
+  return clean.length > 155 ? clean.slice(0, 154) + "…" : clean;
 }
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
@@ -80,9 +97,10 @@ export async function generateMetadata({
   const post = await getPostMeta(slug).catch(() => null);
   if (!post) return {};
 
-  const title = post.yoast_head_json?.title ?? `${decodeHtml(post.title.rendered)} | แม่บ้านดีดี เซอร์วิส`;
+  const rawTitle = post.yoast_head_json?.title ?? decodeHtml(post.title.rendered);
+  const title = seoTitle(rawTitle);
   const rawDesc = post.yoast_head_json?.description ?? decodeHtml(post.excerpt.rendered);
-  const description = rawDesc.slice(0, 160);
+  const description = seoDesc(rawDesc);
   const img = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
 
   return {
