@@ -7,7 +7,8 @@ import CloneFooter from "@/components/CloneFooter";
 import GSAPAnimations from "@/components/GSAPAnimations";
 import ShareButtons from "@/components/ShareButtons";
 
-export const dynamic = "force-static";
+export const dynamicParams = true;
+export const revalidate = 3600;
 
 const BASE = "https://www.maidwonderland.com";
 
@@ -53,7 +54,7 @@ export async function generateStaticParams(): Promise<{ slug: string }[]> {
     while (true) {
       const res = await fetch(
         `${BASE}/wp-json/wp/v2/posts?per_page=100&page=${page}&_fields=slug`,
-        { headers: { "User-Agent": UA } }
+        { headers: { "User-Agent": UA }, next: { revalidate: 3600 } }
       );
       if (!res.ok) break;
       const posts: { slug: string }[] = await res.json();
@@ -71,7 +72,7 @@ async function getPost(slug: string): Promise<WPPost | null> {
   try {
     const res = await fetch(
       `${BASE}/wp-json/wp/v2/posts?slug=${encodeURIComponent(slug)}&_embed`,
-      { headers: { "User-Agent": UA } }
+      { headers: { "User-Agent": UA }, next: { revalidate: 3600 } }
     );
     if (!res.ok) return null;
     const posts: WPPost[] = await res.json();
