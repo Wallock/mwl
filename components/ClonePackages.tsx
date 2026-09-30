@@ -33,14 +33,10 @@ export default function ClonePackages() {
 
   return (
     <>
-      <section className="relative overflow-hidden py-14 lg:py-20"
-        style={{ background: "linear-gradient(160deg,#FBF8F0 0%,#F5EDD8 40%,#FAF3E4 70%,#FBF8F0 100%)" }}>
+      <section className="relative bg-white overflow-hidden py-14 lg:py-20">
 
         <div className="bg-dots absolute inset-0 pointer-events-none z-0 opacity-40" />
-        <div data-blob
-          className="pointer-events-none absolute -top-24 -right-24 w-[500px] h-[500px] rounded-full z-0"
-          style={{ background: "radial-gradient(circle, rgba(212,87,110,0.12) 0%, transparent 70%)", filter: "blur(120px)" }}
-        />
+
         <div data-blob
           className="pointer-events-none absolute bottom-0 -left-20 w-[400px] h-[400px] rounded-full z-0"
           style={{ background: "radial-gradient(circle, rgba(201,169,110,0.14) 0%, transparent 70%)", filter: "blur(100px)" }}

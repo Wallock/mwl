@@ -8,6 +8,12 @@ export default function CloneReviews() {
     const el = ref.current;
     if (!el) return;
 
+    const mo = new MutationObserver(() => {
+      document.querySelectorAll<HTMLAnchorElement>('a[href*="elfsight.com"][target="_blank"]')
+        .forEach((a) => { a.style.setProperty("display", "none", "important"); });
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (!entries[0].isIntersecting) return;

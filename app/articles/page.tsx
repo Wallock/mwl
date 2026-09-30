@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import CloneNavbar from "@/components/CloneNavbar";
 import CloneFooter from "@/components/CloneFooter";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const BASE = "https://www.maidwonderland.com";

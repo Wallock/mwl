@@ -42,23 +42,39 @@ function formatThaiDate(iso: string) {
   return `${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear() + 543}`;
 }
 
+const UA = "Mozilla/5.0 (compatible; NextJS/1.0; +https://maidwonderland.com)";
+
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
+  const slugs: string[] = [];
+  let page = 1;
+  try {
+    while (true) {
+      const res = await fetch(
+        `${BASE}/wp-json/wp/v2/posts?per_page=100&page=${page}&_fields=slug`,
+        { headers: { "User-Agent": UA } }
+      );
+      if (!res.ok) break;
+      const posts: { slug: string }[] = await res.json();
+      if (!Array.isArray(posts) || posts.length === 0) break;
+      slugs.push(...posts.map((p) => p.slug));
+      const total = parseInt(res.headers.get("X-WP-TotalPages") ?? "1", 10);
+      if (page >= total) break;
+      page++;
+    }
+  } catch {}
+  return slugs.map((slug) => ({ slug }));
+}
+
 async function getPost(slug: string): Promise<WPPost | null> {
   try {
     const res = await fetch(
       `${BASE}/wp-json/wp/v2/posts?slug=${encodeURIComponent(slug)}&_embed`,
-      {
-        next: { revalidate: 3600 },
-        headers: { "User-Agent": "Mozilla/5.0 (compatible; NextJS/1.0; +https://maidwonderland.com)" },
-      }
+      { headers: { "User-Agent": UA } }
     );
-    if (!res.ok) {
-      console.error("[article] WP API error:", res.status, res.statusText);
-      return null;
-    }
+    if (!res.ok) return null;
     const posts: WPPost[] = await res.json();
     return posts[0] ?? null;
-  } catch (err) {
-    console.error("[article] WP API fetch failed:", err);
+  } catch {
     return null;
   }
 }
