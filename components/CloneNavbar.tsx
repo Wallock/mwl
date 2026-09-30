@@ -4,13 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { IMG } from "@/lib/images";
 
-const BASE = "https://www.maidwonderland.com";
-
 const serviceLinks = [
-  { label: "บริการแม่บ้าน",        href: `${BASE}/our-service/maid-service/` },
-  { label: "พี่เลี้ยงเด็ก",        href: `${BASE}/our-service/nanny_sv/` },
-  { label: "แม่บ้านดูแลผู้สูงอายุ", href: `${BASE}/our-service/elder_care/` },
-  { label: "แรงงานทั่วไป",         href: `${BASE}/our-service/general_labor/` },
+  { label: "บริการแม่บ้าน",        href: "/services/maid" },
+  { label: "พี่เลี้ยงเด็ก",        href: "/services/nanny" },
+  { label: "แม่บ้านดูแลผู้สูงอายุ", href: "/services/elder" },
+  { label: "แรงงานทั่วไป",         href: "/services/labor" },
 ];
 
 export default function CloneNavbar() {
@@ -51,7 +49,7 @@ export default function CloneNavbar() {
           {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-7">
             <Link href="/" className="c-nav-link">หน้าแรก</Link>
-            <a href={`${BASE}/about_us/`} className="c-nav-link">เกี่ยวกับเรา</a>
+            <Link href="/about" className="c-nav-link">เกี่ยวกับเรา</Link>
 
             <div className="relative" onMouseEnter={() => setSvcOpen(true)} onMouseLeave={() => setSvcOpen(false)}>
               <button
@@ -81,9 +79,9 @@ export default function CloneNavbar() {
               )}
             </div>
 
-            <a href={`${BASE}/gallery/`} className="c-nav-link">รูปกิจกรรม</a>
-            <a href={`${BASE}/article/`} className="c-nav-link">บทความ</a>
-            <a href={`${BASE}/contact_us/`} className="c-nav-link">ติดต่อเรา</a>
+            <Link href="/gallery" className="c-nav-link">รูปกิจกรรม</Link>
+            <Link href="/articles" className="c-nav-link">บทความ</Link>
+            <Link href="/contact" className="c-nav-link">ติดต่อเรา</Link>
           </div>
 
           {/* Desktop CTA buttons */}
@@ -160,7 +158,7 @@ export default function CloneNavbar() {
           }}>
             {/* Main links */}
             <div style={{ padding: "8px 16px" }}>
-              {[["หน้าแรก", "/"], ["เกี่ยวกับเรา", `${BASE}/about_us/`], ["รูปกิจกรรม", `${BASE}/gallery/`], ["บทความ", `${BASE}/article/`], ["ติดต่อเรา", `${BASE}/contact_us/`]].map(([l, h]) => (
+              {[["หน้าแรก", "/"], ["เกี่ยวกับเรา", "/about"], ["รูปกิจกรรม", "/gallery"], ["บทความ", "/articles"], ["ติดต่อเรา", "/contact"]].map(([l, h]) => (
                 <a key={l} href={h} style={{
                   display: "flex", alignItems: "center", gap: 10,
                   padding: "12px 4px", color: "#1A1410", textDecoration: "none",

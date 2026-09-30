@@ -11,77 +11,80 @@ const checks = [
 
 export default function CloneAbout() {
   return (
-    <section
-      className="py-12 lg:py-10"
-      style={{
-        background: "linear-gradient(135deg, #F5E6C0 0%, #FDF3D8 40%, #F0DCA8 70%, #E8D090 100%)",
-        fontFamily: '"Anuphan", sans-serif',
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-5">
-        <div className="grid lg:grid-cols-5 gap-10 lg:gap-12 items-center">
+    <section className="relative bg-white overflow-hidden py-12 lg:py-16">
 
-          {/* LEFT — desktop: col-span-2 | mobile: shows after video */}
-          <Reveal delay={0} className="lg:col-span-2 order-1 lg:order-1">
+      {/* Decorative blobs */}
+      {/* Dot pattern */}
+      <div className="bg-dots absolute inset-0 pointer-events-none z-0 opacity-60" />
 
-            <h2 className="text-center lg:text-left" style={{ fontSize: "clamp(36px,3.8vw,48px)", fontWeight: 900, lineHeight: 1.15, color: "#1A1008", margin: "0 0 14px" }}>
-              บริการจัดหา
-              <span style={{ background: "linear-gradient(135deg,#C67C00,#E8A000)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                {" "}แม่บ้าน
-              </span>
-            </h2>
+      <div data-blob
+        className="pointer-events-none absolute -top-24 -right-24 w-[480px] h-[480px] rounded-full z-0"
+        style={{ background: "radial-gradient(circle, rgba(201,169,110,0.18) 0%, transparent 70%)", filter: "blur(120px)" }}
+      />
+      <div data-blob
+        className="pointer-events-none absolute bottom-0 -left-24 w-[420px] h-[420px] rounded-full z-0"
+        style={{ background: "radial-gradient(circle, rgba(212,87,110,0.12) 0%, transparent 70%)", filter: "blur(120px)" }}
+      />
 
-            <p className="text-center lg:text-left" style={{ fontSize: 17, color: "#5A3E20", lineHeight: 1.85, margin: "0 0 20px" }}>
-              หากคุณกำลังมองหาบริการจัดส่งแม่บ้านที่เชื่อถือได้ เราคือคำตอบของคุณ
-              ไม่ว่าจะเป็น <strong style={{ color: "#9E7D48" }}>แม่บ้านทั่วไป · พี่เลี้ยงเด็ก · คนดูแลผู้สูงอายุ · กรรมกรทั่วไป</strong>
-              {" "}คนไทยและคนลาว พร้อมทำงาน มีบัตรถูกต้อง
-            </p>
+      <div className="relative z-10 max-w-7xl mx-auto px-5">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-            {/* checklist */}
-            <div className="grid grid-cols-2 lg:grid-cols-1 gap-2.5 lg:gap-[10px]">
-              {checks.map(({ Icon, text }) => (
-                <div key={text} style={{
-                  display: "flex", alignItems: "center", gap: 10,
-                  background: "linear-gradient(135deg, rgba(255,255,255,0.80) 0%, rgba(255,248,225,0.70) 100%)",
-                  border: "1px solid rgba(201,169,110,0.40)",
-                  borderBottom: "2px solid rgba(180,130,40,0.30)",
-                  borderRadius: 12, padding: "10px 12px",
-                  boxShadow: "0 2px 10px rgba(158,125,72,0.10), inset 0 1px 0 rgba(255,255,255,0.9)",
-                }}>
-                  <div style={{
-                    width: 34, height: 34, borderRadius: 9, flexShrink: 0,
-                    background: "linear-gradient(145deg,#B8860B,#C9A96E)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    boxShadow: "0 3px 10px rgba(158,125,72,0.40), inset 0 1px 0 rgba(255,255,255,0.25)",
-                  }}>
-                    <Icon size={16} color="#fff" strokeWidth={2.5} />
-                  </div>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: "#3A2810", lineHeight: 1.3 }}>{text}</span>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-
-          {/* RIGHT — video | mobile: shows first */}
-          <Reveal delay={150} className="lg:col-span-3 order-2 lg:order-2">
-            <div style={{
-              borderRadius: 20, overflow: "hidden",
-              boxShadow: "0 16px 48px rgba(100,60,0,0.25), 0 4px 16px rgba(158,125,72,0.20)",
-              border: "3px solid rgba(201,169,110,0.50)",
-              lineHeight: 0,
-              aspectRatio: "16/9",
-              position: "relative",
-            }}>
+          {/* LEFT — Video */}
+          <Reveal delay={0} className="order-2 lg:order-1">
+            <div
+              className="rounded-2xl overflow-hidden aspect-video relative"
+              style={{
+                border: "1.5px solid rgba(201,169,110,0.30)",
+                boxShadow: "0 0 0 6px rgba(201,169,110,0.07), 0 20px 60px rgba(100,60,0,0.16), 0 4px 16px rgba(158,125,72,0.12)",
+              }}
+            >
               <iframe
                 width="100%"
                 height="100%"
                 src="https://www.youtube-nocookie.com/embed/udTUWGXdaDg?si=03TlVZ8rom37vQ7o&controls=0"
                 title="แม่บ้านดีดี เซอร์วิส"
-                style={{ border: 0, position: "absolute", inset: 0, width: "100%", height: "100%" }}
+                className="absolute inset-0 w-full h-full border-0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerPolicy="strict-origin-when-cross-origin"
                 allowFullScreen
               />
+            </div>
+          </Reveal>
+
+          {/* RIGHT — Content */}
+          <Reveal delay={120} className="order-1 lg:order-2">
+            <span className="sec-badge mb-5">บริการของเรา</span>
+
+            <h2
+              className="font-black leading-tight text-ink mb-5"
+              style={{ fontSize: "clamp(30px,3.8vw,46px)" }}
+            >
+              บริการจัดหา
+              <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">
+                {" "}แม่บ้าน
+              </span>
+            </h2>
+
+            <p className="text-[15px] text-ink-muted leading-relaxed mb-8">
+              หากคุณกำลังมองหาบริการจัดส่งแม่บ้านที่เชื่อถือได้ เราคือคำตอบของคุณ
+              ไม่ว่าจะเป็น{" "}
+              <strong className="text-gold-dark font-semibold">
+                แม่บ้านทั่วไป · พี่เลี้ยงเด็ก · คนดูแลผู้สูงอายุ · กรรมกรทั่วไป
+              </strong>
+              {" "}คนไทยและคนลาว พร้อมทำงาน มีบัตรถูกต้อง
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {checks.map(({ Icon, text }, i) => (
+                <Reveal key={text} delay={i * 70}>
+                  <div className="flex items-center gap-3 bg-white border border-[#EDE8DF] rounded-2xl px-4 py-3 shadow-[0_4px_24px_rgba(100,60,0,0.06)] hover:shadow-[0_8px_32px_rgba(100,60,0,0.12)] hover:-translate-y-0.5 transition-all duration-200 cursor-default">
+                    <div className="w-9 h-9 rounded-xl shrink-0 bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-sm">
+                      <Icon size={15} color="#fff" strokeWidth={2.5} />
+                    </div>
+                    <span className="text-[13px] font-bold text-ink leading-tight">{text}</span>
+                  </div>
+                </Reveal>
+              ))}
             </div>
           </Reveal>
 

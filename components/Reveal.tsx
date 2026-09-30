@@ -1,5 +1,9 @@
 "use client";
 import { useEffect, useRef, ReactNode, CSSProperties } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Reveal({
   children,
@@ -17,21 +21,32 @@ export default function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => el.classList.add("rv-visible"), delay);
-          obs.unobserve(el);
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { y: 36, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.85,
+          delay: delay / 1000,
+          ease: "power3.out",
+          clearProps: "transform,opacity",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 88%",
+            toggleActions: "play none none none",
+          },
         }
-      },
-      { threshold: 0.08 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
+      );
+    }, el);
+
+    return () => ctx.revert();
   }, [delay]);
 
   return (
-    <div ref={ref} className={`rv ${className}`} style={style}>
+    <div ref={ref} className={className} style={{ opacity: 0, ...style }}>
       {children}
     </div>
   );

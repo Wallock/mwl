@@ -312,6 +312,20 @@
 
   /* ── Star twinkle ───────────────────────────── */
   .star-pop { display: inline-block; animation: star-pop 2s ease-in-out infinite; }
+
+  /* ── Background patterns ────────────────────── */
+  .bg-dots {
+    background-image: radial-gradient(circle, rgba(201,169,110,0.20) 1.5px, transparent 1.5px);
+    background-size: 28px 28px;
+    animation: drift-dots 30s linear infinite;
+  }
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(201,169,110,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,169,110,0.08) 1px, transparent 1px);
+    background-size: 44px 44px;
+    animation: drift-grid 40s linear infinite;
+  }
 }
 
 @keyframes float-y {
@@ -334,6 +348,14 @@
 @keyframes star-pop {
   0%, 100% { transform: scale(1);    opacity: 1; }
   50%       { transform: scale(1.25); opacity: 0.85; }
+}
+@keyframes drift-dots {
+  from { background-position: 0 0; }
+  to   { background-position: 28px 28px; }
+}
+@keyframes drift-grid {
+  from { background-position: 0 0; }
+  to   { background-position: 44px 44px; }
 }
 @keyframes menu-slide-down {
   from { opacity: 0; transform: translateY(-12px); clip-path: inset(0 0 100% 0); }

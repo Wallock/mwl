@@ -1,12 +1,16 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function CountUp({
   end,
   suffix = "",
   decimals = 0,
   className = "",
-  duration = 1800,
+  duration = 2.2,
 }: {
   end: number;
   suffix?: string;
@@ -16,31 +20,34 @@ export default function CountUp({
 }) {
   const [val, setVal] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
+  const obj = useRef({ n: 0 });
   const fired = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !fired.current) {
+
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top 85%",
+        onEnter: () => {
+          if (fired.current) return;
           fired.current = true;
-          const start = performance.now();
-          const tick = (now: number) => {
-            const p = Math.min((now - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - p, 3);
-            const cur = end * eased;
-            setVal(parseFloat(cur.toFixed(decimals)));
-            if (p < 1) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
-          obs.unobserve(el);
-        }
-      },
-      { threshold: 0.3 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
+          obj.current.n = 0;
+          gsap.to(obj.current, {
+            n: end,
+            duration,
+            ease: "power2.out",
+            onUpdate() {
+              setVal(parseFloat(obj.current.n.toFixed(decimals)));
+            },
+          });
+        },
+      });
+    });
+
+    return () => ctx.revert();
   }, [end, decimals, duration]);
 
   const display =
