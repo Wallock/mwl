@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "www.maidwonderland.com" },
+      { protocol: "https", hostname: "i.ytimg.com" },
     ],
     formats: ["image/avif", "image/webp"],
   },
