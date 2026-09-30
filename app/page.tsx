@@ -63,6 +63,14 @@ const jsonLd = {
 export default function Home() {
   return (
     <>
+      {/* LCP preload — server-emitted so browser discovers before JS runs */}
+      <link
+        rel="preload"
+        as="image"
+        fetchPriority="high"
+        imageSrcSet="/_next/image?url=%2Fimages%2Fbg_header.webp&w=640&q=75 640w,/_next/image?url=%2Fimages%2Fbg_header.webp&w=828&q=75 828w,/_next/image?url=%2Fimages%2Fbg_header.webp&w=1080&q=75 1080w,/_next/image?url=%2Fimages%2Fbg_header.webp&w=1200&q=75 1200w,/_next/image?url=%2Fimages%2Fbg_header.webp&w=1920&q=75 1920w"
+        imageSizes="100vw"
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

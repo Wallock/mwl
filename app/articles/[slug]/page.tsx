@@ -46,12 +46,19 @@ async function getPost(slug: string): Promise<WPPost | null> {
   try {
     const res = await fetch(
       `${BASE}/wp-json/wp/v2/posts?slug=${encodeURIComponent(slug)}&_embed`,
-      { next: { revalidate: 3600 } }
+      {
+        next: { revalidate: 3600 },
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; NextJS/1.0; +https://maidwonderland.com)" },
+      }
     );
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.error("[article] WP API error:", res.status, res.statusText);
+      return null;
+    }
     const posts: WPPost[] = await res.json();
     return posts[0] ?? null;
-  } catch {
+  } catch (err) {
+    console.error("[article] WP API fetch failed:", err);
     return null;
   }
 }

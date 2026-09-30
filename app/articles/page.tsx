@@ -38,10 +38,17 @@ function decodeHtml(str: string) {
 
 async function getPosts(): Promise<WPPost[]> {
   try {
-    const res = await fetch(API, { next: { revalidate: 3600 } });
-    if (!res.ok) return [];
+    const res = await fetch(API, {
+      next: { revalidate: 3600 },
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; NextJS/1.0; +https://maidwonderland.com)" },
+    });
+    if (!res.ok) {
+      console.error("[articles] WP API error:", res.status, res.statusText, await res.text().then(t => t.slice(0, 200)));
+      return [];
+    }
     return await res.json();
-  } catch {
+  } catch (err) {
+    console.error("[articles] WP API fetch failed:", err);
     return [];
   }
 }

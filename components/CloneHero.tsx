@@ -1,7 +1,6 @@
 "use client";
 import { CheckCheck, Star, Clock, ShieldCheck } from "lucide-react";
 import Image from "next/image";
-import { preload } from "react-dom";
 import { useEffect, useRef, useState } from "react";
 
 function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
@@ -43,7 +42,6 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
 }
 
 export default function CloneHero() {
-  preload("/images/bg_header.webp", { as: "image", fetchPriority: "high" });
   return (
     <section style={{ position: "relative", lineHeight: 0 }}>
       <Image
