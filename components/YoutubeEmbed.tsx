@@ -34,7 +34,7 @@ export default function YoutubeEmbed({ videoId, title = "YouTube video", classNa
     >
       {/* Thumbnail */}
       <Image
-        src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
+        src="/images/video.webp"
         alt={title}
         fill
         sizes="(max-width: 1024px) 100vw, 50vw"
