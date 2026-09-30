@@ -7,6 +7,8 @@ import CloneFooter from "@/components/CloneFooter";
 import GSAPAnimations from "@/components/GSAPAnimations";
 import ShareButtons from "@/components/ShareButtons";
 
+export const dynamic = "force-static";
+
 const BASE = "https://www.maidwonderland.com";
 
 interface WPPost {
