@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Script from "next/script";
 import Image from "next/image";
 import Link from "next/link";
 import CloneNavbar from "@/components/CloneNavbar";
@@ -55,15 +56,68 @@ async function fetchPost(slug: string): Promise<WPPost | null> {
   return null;
 }
 
+function setMetaTag(attr: string, key: string, content: string) {
+  let el = document.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute(attr, key);
+    document.head.appendChild(el);
+  }
+  el.setAttribute("content", content);
+}
+
 export default function ArticleContent({ slug }: { slug: string }) {
   const [post, setPost] = useState<WPPost | null | "loading">("loading");
+  const [jsonLd, setJsonLd] = useState<string>("");
 
   useEffect(() => {
-    fetchPost(slug).then((p) => setPost(p));
+    fetchPost(slug).then((p) => {
+      setPost(p);
+      if (!p) return;
+
+      const title = `${decodeHtml(p.title.rendered)} | แม่บ้านดีดี เซอร์วิส`;
+      const excerpt = decodeHtml(p.excerpt?.rendered ?? "").slice(0, 160);
+      const img = p._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
+      const url = `https://www.maidwonderland.com/articles/${slug}`;
+
+      document.title = title;
+      setMetaTag("name", "description", excerpt);
+      setMetaTag("property", "og:title", title);
+      setMetaTag("property", "og:description", excerpt);
+      setMetaTag("property", "og:url", url);
+      setMetaTag("property", "og:type", "article");
+      if (img) setMetaTag("property", "og:image", img);
+      setMetaTag("name", "twitter:card", "summary_large_image");
+      setMetaTag("name", "twitter:title", title);
+      setMetaTag("name", "twitter:description", excerpt);
+
+      setJsonLd(JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: decodeHtml(p.title.rendered),
+        description: excerpt,
+        datePublished: p.date,
+        url,
+        publisher: {
+          "@type": "Organization",
+          name: "แม่บ้านดีดี เซอร์วิส",
+          url: "https://www.maidwonderland.com",
+        },
+        ...(img && { image: img }),
+      }));
+    });
   }, [slug]);
 
   return (
     <>
+      {jsonLd && (
+        <Script
+          id="article-jsonld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLd }}
+          strategy="afterInteractive"
+        />
+      )}
       <CloneNavbar />
       <GSAPAnimations />
       <main>
