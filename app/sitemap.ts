@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 
+export const dynamic = "force-static";
+
 const BASE = "https://www.maidwonderland.com";
 
 const services = ["maid", "nanny", "elder", "labor"];
