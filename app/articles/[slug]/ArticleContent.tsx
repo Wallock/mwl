@@ -188,6 +188,7 @@ export default function ArticleContent({ slug }: { slug: string }) {
                       className="w-full block"
                       style={{ height: "auto", aspectRatio: "16/9", objectFit: "cover" }}
                       priority
+                      unoptimized
                     />
                   </div>
                 )}

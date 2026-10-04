@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import FloatingContact from "@/components/FloatingContact";
 
 const anuphan = localFont({
   src: [
@@ -35,6 +36,7 @@ export default function RootLayout({
     <html lang="th" data-scroll-behavior="smooth" className={anuphan.variable}>
       <body>
         {children}
+        <FloatingContact />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="https://js.wb.in.th/tracker/tBmPI9UA5yfObxACd0O6gLG2DW2aFCjFrUJDgy9R119yTy5dlRafaOr5Bill8QAo" width="1" height="1" style={{display:"none"}} alt="" />
       </body>

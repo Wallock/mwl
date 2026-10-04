@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { IMG } from "@/lib/images";
+import { ZoomIn, ShieldCheck } from "lucide-react";
 
 export default function LicenseLightbox() {
   const [open, setOpen] = useState(false);
@@ -19,53 +20,90 @@ export default function LicenseLightbox() {
 
   return (
     <>
-      <button
-        onClick={() => setOpen(true)}
-        className="relative w-full max-w-[220px] lg:max-w-[260px] animate-float cursor-zoom-in"
-        style={{ background: "none", border: "none", padding: 0 }}
-        aria-label="ดูใบอนุญาตขนาดเต็ม"
-      >
-        <div className="absolute -inset-4 rounded-3xl blur-2xl bg-gradient-to-br from-gold/20 to-gold-dark/10" />
-        <div className="relative p-1.5 rounded-3xl border border-gold/30 bg-gradient-to-br from-gold/25 to-gold/5 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+      <div className="w-full flex flex-col items-center gap-3">
+
+        {/* ── Thumbnail ─────────────────────────── */}
+        <button
+          onClick={() => setOpen(true)}
+          className="group relative w-full cursor-zoom-in rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+          style={{
+            border: "1px solid rgba(201,169,110,0.30)",
+            boxShadow: "0 8px 32px rgba(100,60,0,0.12), 0 2px 8px rgba(100,60,0,0.06)",
+          }}
+          aria-label="ดูใบอนุญาตขนาดเต็ม"
+        >
           <Image
             src={IMG.license}
             alt="ใบอนุญาตจัดหางาน"
-            width={260}
-            height={360}
-            className="w-full rounded-2xl block"
-            style={{ height: "auto", width: "100%" }}
+            width={440}
+            height={616}
+            className="w-full block"
+            style={{ height: "auto", display: "block" }}
             priority
           />
-        </div>
-        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gradient-to-r from-gold to-gold-dark text-white text-[10px] font-black tracking-wider uppercase px-3.5 py-1.5 rounded-full shadow-lg">
-          ใบอนุญาตจัดหางานถูกต้อง
-        </div>
-      </button>
 
+          {/* Hover overlay */}
+          <div
+            className="absolute inset-0 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100 transition-opacity duration-250"
+            style={{ background: "linear-gradient(to top, rgba(26,20,16,0.55) 0%, transparent 55%)" }}
+          >
+            <span className="flex items-center gap-1.5 bg-white/95 text-[#1A1410] text-xs font-bold px-3.5 py-1.5 rounded-full shadow-lg">
+              <ZoomIn size={12} />
+              ดูขนาดเต็ม
+            </span>
+          </div>
+        </button>
+
+        {/* ── Verified badge ────────────────────── */}
+        <div
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-bold"
+          style={{
+            background: "rgba(201,169,110,0.10)",
+            border: "1px solid rgba(201,169,110,0.30)",
+            color: "var(--gold-dark)",
+          }}
+        >
+          <ShieldCheck size={13} strokeWidth={2.5} />
+          ใบอนุญาตจัดหางาน · กรมการจัดหางาน กทม.
+        </div>
+      </div>
+
+      {/* ── Lightbox ─────────────────────────────── */}
       {open && (
         <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-          style={{ background: "rgba(10,6,3,0.85)", backdropFilter: "blur(6px)" }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-5"
+          style={{ background: "rgba(10,6,3,0.88)", backdropFilter: "blur(8px)" }}
           onClick={() => setOpen(false)}
         >
           <div
             className="relative"
-            style={{ animation: "lightbox-in 0.22s ease-out", maxHeight: "92dvh" }}
+            style={{ animation: "lightbox-in 0.20s ease-out" }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative p-2 rounded-3xl border border-gold/40 bg-gradient-to-br from-gold/20 to-gold/5 shadow-2xl" style={{ maxHeight: "92dvh" }}>
+            <div
+              className="rounded-2xl overflow-hidden"
+              style={{
+                border: "1px solid rgba(201,169,110,0.35)",
+                boxShadow: "0 32px 80px rgba(0,0,0,0.55)",
+              }}
+            >
               <Image
                 src={IMG.license}
                 alt="ใบอนุญาตจัดหางาน"
                 width={800}
                 height={1120}
-                className="rounded-2xl block"
-                style={{ height: "min(84dvh, 84vw * 1.4)", width: "auto", maxWidth: "90vw", objectFit: "contain" }}
+                className="block"
+                style={{
+                  height: "min(88dvh, 80vh)",
+                  width: "auto",
+                  maxWidth: "min(92vw, 560px)",
+                  objectFit: "contain",
+                }}
               />
             </div>
             <button
               onClick={() => setOpen(false)}
-              className="absolute -top-3 -right-3 w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-base shadow-lg"
+              className="absolute -top-3 -right-3 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg"
               style={{ background: "linear-gradient(135deg,#C9A96E,#9E7D48)" }}
               aria-label="ปิด"
             >
@@ -77,8 +115,8 @@ export default function LicenseLightbox() {
 
       <style>{`
         @keyframes lightbox-in {
-          from { opacity: 0; transform: scale(0.88); }
-          to   { opacity: 1; transform: scale(1); }
+          from { opacity: 0; transform: scale(0.90) translateY(12px); }
+          to   { opacity: 1; transform: scale(1) translateY(0); }
         }
       `}</style>
     </>

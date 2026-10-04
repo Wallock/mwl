@@ -77,6 +77,7 @@ export default function CloneArticles() {
                         height={450}
                         className="art-img"
                         style={{ height: "auto" }}
+                        unoptimized
                       />
                     )}
                   </div>
