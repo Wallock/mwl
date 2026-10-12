@@ -3,18 +3,20 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IMG } from "@/lib/images";
-
-const serviceLinks = [
-  { label: "บริการแม่บ้าน",        href: "/services/maid" },
-  { label: "พี่เลี้ยงเด็ก",        href: "/services/nanny" },
-  { label: "แม่บ้านดูแลผู้สูงอายุ", href: "/services/elder" },
-  { label: "แรงงานทั่วไป",         href: "/services/labor" },
-];
+import { useT } from "@/context/LanguageContext";
 
 export default function CloneNavbar() {
+  const T = useT();
   const [open, setOpen] = useState(false);
   const [svcOpen, setSvcOpen] = useState(false);
   const svcTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const serviceLinks = [
+    { label: T.nav.serviceMaid,  href: "/services/maid" },
+    { label: T.nav.serviceNanny, href: "/services/nanny" },
+    { label: T.nav.serviceElder, href: "/services/elder" },
+    { label: T.nav.serviceLabor, href: "/services/labor" },
+  ];
 
   const onSvcEnter = () => {
     if (svcTimer.current) clearTimeout(svcTimer.current);
@@ -60,15 +62,15 @@ export default function CloneNavbar() {
 
           {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-7">
-            <Link href="/" className="c-nav-link">หน้าแรก</Link>
-            <Link href="/about" className="c-nav-link">เกี่ยวกับเรา</Link>
+            <Link href="/" className="c-nav-link">{T.nav.home}</Link>
+            <Link href="/about" className="c-nav-link">{T.nav.about}</Link>
 
             <div className="relative" onMouseEnter={onSvcEnter} onMouseLeave={onSvcLeave}>
               <button
                 className="c-nav-link"
                 style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", gap: 5 }}
               >
-                บริการ
+                {T.nav.services}
                 <span style={{ fontSize: 9, color: "#B0A090", display: "inline-block", transition: "transform 0.2s", transform: svcOpen ? "rotate(180deg)" : "none" }}>▾</span>
               </button>
               {svcOpen && (
@@ -82,7 +84,7 @@ export default function CloneNavbar() {
                     boxShadow: "0 16px 56px rgba(26,20,16,0.12), 0 4px 16px rgba(201,169,110,0.10)",
                   }}>
                   {serviceLinks.map((sl) => (
-                    <a key={sl.label} href={sl.href}
+                    <a key={sl.href} href={sl.href}
                       style={{ display: "block", padding: "10px 16px", color: "#1A1410", textDecoration: "none", fontSize: 14, borderRadius: 10, fontWeight: 500, transition: "background 0.15s, color 0.15s" }}
                       onMouseEnter={e => { e.currentTarget.style.background = "rgba(201,169,110,0.08)"; e.currentTarget.style.color = "#9E7D48"; }}
                       onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#1A1410"; }}
@@ -94,14 +96,14 @@ export default function CloneNavbar() {
               )}
             </div>
 
-            <Link href="/gallery" className="c-nav-link">รูปกิจกรรม</Link>
-            <Link href="/articles" className="c-nav-link">บทความ</Link>
-            <Link href="/contact" className="c-nav-link">ติดต่อเรา</Link>
+            <Link href="/gallery" className="c-nav-link">{T.nav.gallery}</Link>
+            <Link href="/articles" className="c-nav-link">{T.nav.articles}</Link>
+            <Link href="/contact" className="c-nav-link">{T.nav.contact}</Link>
           </div>
 
           {/* Desktop CTA buttons */}
           <div className="hidden lg:flex items-center gap-2.5">
-                          {/* Phone — split button */}
+              {/* Phone — split button */}
               <a href="tel:0618437666" style={{
                 flex: 1, display: "flex", alignItems: "stretch",
                 borderRadius: 14, overflow: "hidden", textDecoration: "none",
@@ -120,7 +122,7 @@ export default function CloneNavbar() {
                   display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "center",
                   fontWeight: 700, fontSize: 13, lineHeight: 1.3,
                 }}>
-                  <span>โทรเลย</span>
+                  <span>{T.nav.callButton}</span>
                   <span style={{ fontSize: 11, opacity: 0.9 }}>061-843-7666</span>
                 </div>
               </a>
@@ -144,7 +146,7 @@ export default function CloneNavbar() {
                   display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "center",
                   fontWeight: 700, fontSize: 13, lineHeight: 1.3,
                 }}>
-                  <span>แอดไลน์เลย</span>
+                  <span>{T.nav.lineButton}</span>
                   <span style={{ fontSize: 11, opacity: 0.9 }}>@dede1721</span>
                 </div>
               </a>
@@ -174,8 +176,14 @@ export default function CloneNavbar() {
           }}>
             {/* Main links */}
             <div style={{ padding: "8px 16px" }}>
-              {[["หน้าแรก", "/"], ["เกี่ยวกับเรา", "/about"], ["รูปกิจกรรม", "/gallery"], ["บทความ", "/articles"], ["ติดต่อเรา", "/contact"]].map(([l, h]) => (
-                <a key={l} href={h} style={{
+              {[
+                [T.nav.home, "/"],
+                [T.nav.about, "/about"],
+                [T.nav.gallery, "/gallery"],
+                [T.nav.articles, "/articles"],
+                [T.nav.contact, "/contact"],
+              ].map(([l, h]) => (
+                <a key={h} href={h} style={{
                   display: "flex", alignItems: "center", gap: 10,
                   padding: "12px 4px", color: "#1A1410", textDecoration: "none",
                   fontWeight: 600, fontSize: 15,
@@ -189,10 +197,10 @@ export default function CloneNavbar() {
 
             {/* Services grid */}
             <div style={{ margin: "4px 16px 0", padding: "12px 16px", background: "rgba(201,169,110,0.10)", borderRadius: 12, border: "1px solid rgba(201,169,110,0.20)" }}>
-              <p style={{ color: "#9E7D48", fontSize: 10, marginBottom: 8, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" }}>บริการของเรา</p>
+              <p style={{ color: "#9E7D48", fontSize: 10, marginBottom: 8, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" }}>{T.nav.servicesLabel}</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
                 {serviceLinks.map((sl) => (
-                  <a key={sl.label} href={sl.href} style={{
+                  <a key={sl.href} href={sl.href} style={{
                     display: "block", padding: "8px 10px",
                     background: "rgba(255,255,255,0.70)", borderRadius: 8,
                     border: "1px solid rgba(201,169,110,0.22)",
@@ -226,7 +234,7 @@ export default function CloneNavbar() {
                   display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "center",
                   fontWeight: 700, fontSize: 13, lineHeight: 1.3,
                 }}>
-                  <span>โทรเลย</span>
+                  <span>{T.nav.callButton}</span>
                   <span style={{ fontSize: 11, opacity: 0.9 }}>061-843-7666</span>
                 </div>
               </a>
@@ -250,7 +258,7 @@ export default function CloneNavbar() {
                   display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "center",
                   fontWeight: 700, fontSize: 13, lineHeight: 1.3,
                 }}>
-                  <span>แอดไลน์เลย</span>
+                  <span>{T.nav.lineButton}</span>
                   <span style={{ fontSize: 11, opacity: 0.9 }}>@dede1721</span>
                 </div>
               </a>

@@ -2,82 +2,132 @@
 import Reveal from "./Reveal";
 import { ShieldCheck, Stethoscope, FileCheck, GraduationCap, MapPin } from "lucide-react";
 import YoutubeEmbed from "./YoutubeEmbed";
+import { motion } from "framer-motion";
+import { useT } from "@/context/LanguageContext";
 
-const checks = [
-  { Icon: Stethoscope,   text: "ตรวจโรคติดต่อก่อนส่งงาน" },
-  { Icon: ShieldCheck,   text: "ตรวจประวัติอาชญากรรม" },
-  { Icon: FileCheck,     text: "คนงานมีใบอนุญาตถูกต้อง" },
-  { Icon: GraduationCap, text: "อบรมก่อนส่ง มาตรฐานสูง" },
-  { Icon: MapPin,        text: "จัดส่งทั่วประเทศไทย" },
-];
+const checkIcons = [Stethoscope, ShieldCheck, FileCheck, GraduationCap, MapPin];
 
 export default function CloneAbout() {
+  const T = useT();
+  const checks = T.about.checks.map((text, i) => ({ Icon: checkIcons[i], text }));
+  const stats = [
+    { n: "20+",  l: T.about.statYears },
+    { n: "95K+", l: T.about.statReviews },
+    { n: "56",   l: T.about.statProvinces },
+  ];
   return (
-    <section className="relative bg-white overflow-hidden py-12 lg:py-16">
+    <section className="relative bg-white overflow-hidden py-16 lg:py-28">
+      <div className="bg-grid absolute inset-0 pointer-events-none z-0 opacity-50" />
+      <div className="pointer-events-none absolute -top-20 -right-20 w-[560px] h-[560px] rounded-full z-0"
+        style={{ background: "radial-gradient(circle, rgba(201,169,110,0.14) 0%, transparent 70%)", filter: "blur(100px)" }} />
 
-      {/* Decorative blobs */}
-      {/* Dot pattern */}
-      <div className="bg-dots absolute inset-0 pointer-events-none z-0 opacity-60" />
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-      <div data-blob
-        className="pointer-events-none absolute -top-24 -right-24 w-[480px] h-[480px] rounded-full z-0"
-        style={{ background: "radial-gradient(circle, rgba(201,169,110,0.18) 0%, transparent 70%)", filter: "blur(120px)" }}
-      />
-      <div data-blob
-        className="pointer-events-none absolute bottom-0 -left-24 w-[420px] h-[420px] rounded-full z-0"
-        style={{ background: "radial-gradient(circle, rgba(212,87,110,0.12) 0%, transparent 70%)", filter: "blur(120px)" }}
-      />
+          {/* LEFT */}
+          <Reveal delay={0} className="order-1 text-center lg:text-left">
 
-      <div className="relative z-10 max-w-7xl mx-auto px-5">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-
-          {/* LEFT — Video */}
-          <Reveal delay={0} className="order-2 lg:order-1">
-            <div
-              className="rounded-2xl overflow-hidden aspect-video relative"
-              style={{
-                border: "1.5px solid rgba(201,169,110,0.30)",
-                boxShadow: "0 0 0 6px rgba(201,169,110,0.07), 0 20px 60px rgba(100,60,0,0.16), 0 4px 16px rgba(158,125,72,0.12)",
-              }}
-            >
-              <YoutubeEmbed videoId="udTUWGXdaDg" title="แม่บ้านดีดี เซอร์วิส" />
-            </div>
-          </Reveal>
-
-          {/* RIGHT — Content */}
-          <Reveal delay={120} className="order-1 lg:order-2">
-            <span className="sec-badge mb-5">บริการของเรา</span>
+            <span className="sec-badge">{T.about.badge}</span>
 
             <h2
-              className="font-black leading-tight text-ink mb-5"
-              style={{ fontSize: "clamp(30px,3.8vw,46px)" }}
+              className="font-black leading-[1.1] mt-4 mb-5"
+              style={{
+                fontSize: "clamp(40px, 5vw, 72px)",
+                color: "#1A1410",
+              }}
             >
-              บริการจัดหา
-              <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">
-                {" "}แม่บ้าน
+              {T.about.heading}
+              <br />
+              <span style={{
+                background: "linear-gradient(135deg, #C9A96E 0%, #9E7D48 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}>
+                {T.about.headingHighlight}
               </span>
             </h2>
 
-            <p className="text-[15px] text-ink-muted leading-relaxed mb-8">
-              หากคุณกำลังมองหาบริการจัดส่งแม่บ้านที่เชื่อถือได้ เราคือคำตอบของคุณ
-              ไม่ว่าจะเป็น{" "}
-              <strong className="text-gold-dark font-semibold">
-                แม่บ้านทั่วไป · พี่เลี้ยงเด็ก · คนดูแลผู้สูงอายุ · กรรมกรทั่วไป
-              </strong>
-              {" "}คนไทยและคนลาว พร้อมทำงาน มีบัตรถูกต้อง
+            <p className="leading-relaxed mb-7 text-[16px]" style={{ color: "#5A4A3A", maxWidth: 520 }}>
+              {T.about.desc}
             </p>
 
+            {/* Feature grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {checks.map(({ Icon, text }, i) => (
-                <Reveal key={text} delay={i * 70}>
-                  <div className="flex items-center gap-3 bg-white border border-[#EDE8DF] rounded-2xl px-4 py-3 shadow-[0_4px_24px_rgba(100,60,0,0.06)] hover:shadow-[0_8px_32px_rgba(100,60,0,0.12)] hover:-translate-y-0.5 transition-all duration-200 cursor-default">
-                    <div className="w-9 h-9 rounded-xl shrink-0 bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-sm">
-                      <Icon size={15} color="#fff" strokeWidth={2.5} />
-                    </div>
-                    <span className="text-[13px] font-bold text-ink leading-tight">{text}</span>
+              {checks.map(({ Icon, text }) => (
+                <motion.div
+                  key={text}
+                  className="flex items-center gap-3 rounded-2xl px-4 py-3.5 cursor-default"
+                  style={{
+                    background: "rgba(201,169,110,0.07)",
+                    border: "1px solid rgba(201,169,110,0.22)",
+                  }}
+                  whileHover={{
+                    background: "rgba(201,169,110,0.13)",
+                    borderColor: "rgba(201,169,110,0.45)",
+                    x: 5,
+                  }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ background: "linear-gradient(135deg, #C9A96E, #9E7D48)", boxShadow: "0 3px 10px rgba(201,169,110,0.35)" }}
+                  >
+                    <Icon size={16} color="#fff" strokeWidth={2.5} />
                   </div>
-                </Reveal>
+                  <span className="text-[15px] font-bold leading-tight" style={{ color: "#1A1410" }}>{text}</span>
+                </motion.div>
               ))}
+            </div>
+          </Reveal>
+
+          {/* RIGHT */}
+          <Reveal delay={140} className="order-2">
+            <div className="space-y-5">
+
+              {/* Video */}
+              <div
+                className="relative rounded-2xl overflow-hidden aspect-video"
+                style={{
+                  border: "2px solid rgba(201,169,110,0.32)",
+                  boxShadow: "0 0 0 8px rgba(201,169,110,0.07), 0 28px 90px rgba(100,60,0,0.20)",
+                }}
+              >
+                <YoutubeEmbed videoId="udTUWGXdaDg" title="แม่บ้านดีดี เซอร์วิส" />
+              </div>
+
+              {/* Stats */}
+              <div
+                className="grid grid-cols-3 rounded-2xl overflow-hidden"
+                style={{
+                  background: "#fff",
+                  border: "1px solid rgba(201,169,110,0.18)",
+                  boxShadow: "0 4px 28px rgba(100,60,0,0.08)",
+                }}
+              >
+                {stats.map(({ n, l }, i) => (
+                  <motion.div
+                    key={l}
+                    className="py-6 text-center"
+                    style={i < 2 ? { borderRight: "1px solid rgba(201,169,110,0.14)" } : {}}
+                    whileHover={{ background: "rgba(201,169,110,0.05)" }}
+                    transition={{ duration: 0.18 }}
+                  >
+                    <div
+                      className="font-black leading-none mb-1.5"
+                      style={{
+                        fontSize: "clamp(28px, 3.5vw, 40px)",
+                        background: "linear-gradient(135deg, #C9A96E, #9E7D48)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }}
+                    >
+                      {n}
+                    </div>
+                    <div className="text-[13px] font-semibold" style={{ color: "#7A6555" }}>{l}</div>
+                  </motion.div>
+                ))}
+              </div>
+
             </div>
           </Reveal>
 

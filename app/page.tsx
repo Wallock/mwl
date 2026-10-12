@@ -80,10 +80,10 @@ export default function Home() {
 
         {/* #FAFAF9 */}
         <CloneTrust />
-        <WaveDivider bgColor="#FAFAF9" fillColor="#ffffff" />
 
         {/* white */}
         <CloneCTAButtons />
+                <WaveDivider bgColor="#FAFAF9" fillColor="#ffffff" />
         <CloneClients />
 
         {/* white → #FBF8F2 */}

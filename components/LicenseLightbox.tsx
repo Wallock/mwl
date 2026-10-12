@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { IMG } from "@/lib/images";
-import { ZoomIn, ShieldCheck } from "lucide-react";
+import { ZoomIn } from "lucide-react";
 
 export default function LicenseLightbox() {
   const [open, setOpen] = useState(false);
@@ -25,11 +25,7 @@ export default function LicenseLightbox() {
         {/* ── Thumbnail ─────────────────────────── */}
         <button
           onClick={() => setOpen(true)}
-          className="group relative w-full cursor-zoom-in rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-          style={{
-            border: "1px solid rgba(201,169,110,0.30)",
-            boxShadow: "0 8px 32px rgba(100,60,0,0.12), 0 2px 8px rgba(100,60,0,0.06)",
-          }}
+          className="group relative w-full cursor-zoom-in overflow-hidden focus-visible:outline-none animate-float"
           aria-label="ดูใบอนุญาตขนาดเต็ม"
         >
           <Image
@@ -54,18 +50,6 @@ export default function LicenseLightbox() {
           </div>
         </button>
 
-        {/* ── Verified badge ────────────────────── */}
-        <div
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-bold"
-          style={{
-            background: "rgba(201,169,110,0.10)",
-            border: "1px solid rgba(201,169,110,0.30)",
-            color: "var(--gold-dark)",
-          }}
-        >
-          <ShieldCheck size={13} strokeWidth={2.5} />
-          ใบอนุญาตจัดหางาน · กรมการจัดหางาน กทม.
-        </div>
       </div>
 
       {/* ── Lightbox ─────────────────────────────── */}

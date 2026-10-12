@@ -2,6 +2,7 @@
 import { CheckCheck, Star, Clock, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useT } from "@/context/LanguageContext";
 
 function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [value, setValue] = useState(0);
@@ -41,9 +42,11 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
   );
 }
 
-export default function CloneHero() {
+// ─── Desktop ──────────────────────────────────────────────────────────────────
+function HeroDesktop() {
+  const T = useT();
   return (
-    <section style={{ position: "relative", lineHeight: 0 }}>
+    <section className="hidden lg:block" style={{ position: "relative", lineHeight: 0 }}>
       <Image
         src="/images/bg_header.webp"
         alt="แม่บ้านดีดี เซอร์วิส"
@@ -105,7 +108,7 @@ export default function CloneHero() {
               padding: "0.4vw 0.4vw",
             }}
           >
-            เปิดบริการมากกว่า 7 ปี
+            {T.hero.badge}
           </span>
           <span
             style={{
@@ -129,7 +132,7 @@ export default function CloneHero() {
             textShadow: "0 1px 2px rgba(255,255,255,0.4)",
           }}
         >
-          แม่บ้านดีดี บริการจัดหา
+          {T.hero.heading1}
           <br />
           <span
             style={{
@@ -141,10 +144,10 @@ export default function CloneHero() {
               filter: "drop-shadow(0 1px 4px rgba(255,0,128,0.40))",
             }}
           >
-            แม่บ้าน · พี่เลี้ยงน้อง
+            {T.hero.heading2}
           </span>
           <br />
-          <span style={{ fontSize: "3vw" }}>คนดูแลผู้สูงอายุ</span>
+          <span style={{ fontSize: "3vw" }}>{T.hero.heading3}</span>
         </h1>
 
         {/* Sub */}
@@ -157,10 +160,10 @@ export default function CloneHero() {
             lineHeight: 0.5,
           }}
         >
-          ที่มีคุณภาพและมากประสบการณ์
+          {T.hero.desc}
           <span style={{ color: "#FF0080", fontWeight: 700 }}>
             {" "}
-            พร้อมจัดส่งทั่วประเทศไทย
+            {T.hero.descHighlight}
           </span>
         </p>
 
@@ -204,7 +207,7 @@ export default function CloneHero() {
             padding: "0.4vw 0.9vw",lineHeight: 1.3,
             display: "flex", alignItems: "center",
           }}>
-            บริการรวดเร็วทันใจ มีทีมงานให้คำปรึกษา<br/>พร้อมจัดหาคน ได้ตามความต้องการทันที
+            {T.hero.greenBadge}
           </span>
         </span>
 
@@ -212,9 +215,9 @@ export default function CloneHero() {
         <div style={{ display: "flex", gap: "0.8vw", marginTop: "1.5vw" }}>
           {(
             [
-              { target: 95, suffix: "K+", label: "รีวิว", Icon: Star },
-              { target: 7, suffix: "+", label: "ปีที่เปิดบริการ", Icon: Clock },
-              { target: 100, suffix: "%", label: "ตรวจสอบแล้ว", Icon: ShieldCheck },
+              { target: 95, suffix: "K+", label: T.hero.statReviews, Icon: Star },
+              { target: 7, suffix: "+", label: T.hero.statYears, Icon: Clock },
+              { target: 100, suffix: "%", label: T.hero.statVerified, Icon: ShieldCheck },
             ] as const
           ).map(({ target, suffix, label, Icon }) => (
             <div
@@ -234,21 +237,16 @@ export default function CloneHero() {
                 overflow: "hidden",
               }}
             >
-              {/* top gloss */}
               <div
                 style={{
                   position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
+                  top: 0, left: 0, right: 0,
                   height: "40%",
-                  background:
-                    "linear-gradient(180deg, rgba(255,255,255,0.35) 0%, transparent 100%)",
+                  background: "linear-gradient(180deg, rgba(255,255,255,0.35) 0%, transparent 100%)",
                   borderRadius: "1vw 1vw 0 0",
                   pointerEvents: "none",
                 }}
               />
-              {/* icon watermark */}
               <div style={{
                 position: "absolute", top: "50%", left: "-0.9vw",
                 transform: "translateY(-50%)",
@@ -259,24 +257,16 @@ export default function CloneHero() {
               </div>
               <div
                 style={{
-                  fontSize: "2.4vw",
-                  fontWeight: 900,
-                  color: "#7A4F00",
-                  lineHeight: 1.0,
-                  paddingLeft: "2vw",
-                  letterSpacing: "0.1em",
+                  fontSize: "2.4vw", fontWeight: 900, color: "#7A4F00",
+                  lineHeight: 1.0, paddingLeft: "2vw", letterSpacing: "0.1em",
                 }}
               >
                 <CountUp target={target} suffix={suffix} />
               </div>
               <div
                 style={{
-                  fontSize: "1vw",
-                  color: "#8A5E10",
-                  fontWeight: 700,
-                  marginTop: "0.5vw",
-                  paddingLeft: "2vw",
-                  letterSpacing: "0.04em",
+                  fontSize: "1vw", color: "#8A5E10", fontWeight: 700,
+                  marginTop: "0.5vw", paddingLeft: "2vw", letterSpacing: "0.04em",
                 }}
               >
                 {label}
@@ -285,8 +275,114 @@ export default function CloneHero() {
           ))}
         </div>
       </div>
-      {/* Animated shimmer gold bar */}
       <div className="h-[3px] shimmer-bar" />
     </section>
+  );
+}
+
+// ─── Mobile ───────────────────────────────────────────────────────────────────
+function HeroMobile() {
+  const T = useT();
+  return (
+    <section className="lg:hidden">
+      {/* Image — fixed height, never changes */}
+      <div className="relative overflow-hidden" style={{ height: "92vw", minHeight: 340 }}>
+        <Image
+          src="/images/bg_header.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "-80px center", opacity: 0.9 }}
+        />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to bottom, transparent 40%, rgba(251,248,242,0.70) 80%, #FBF8F2 100%)" }} />
+      </div>
+
+      {/* Text block — below image, overlaps slightly */}
+      <div className="relative z-10 px-5 pt-4 pb-6 -mt-32" style={{ background: "linear-gradient(to bottom, transparent, #FBF8F2 30%)" }}>
+        {/* Badge */}
+        <div className="flex items-center justify-center gap-2 mb-4">
+          <span className="h-px w-10" style={{ background: "linear-gradient(90deg,transparent,#C9A96E)" }} />
+          <span className="text-[11px] font-bold tracking-[0.15em] uppercase" style={{ color: "#9E7D48" }}>
+            {T.hero.badge}
+          </span>
+          <span className="h-px w-10" style={{ background: "linear-gradient(90deg,#C9A96E,transparent)" }} />
+        </div>
+
+        {/* Heading */}
+        <h1 className="font-bold leading-snug text-center mb-1" style={{ fontSize: "clamp(26px,7vw,34px)", color: "#1A1008", letterSpacing: "-0.02em" }}>
+          {T.hero.heading1}
+          <br />
+          <span style={{
+            background: "linear-gradient(135deg,#FF0080 0%,#FF4DAD 50%,#FF0080 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            filter: "drop-shadow(0 1px 3px rgba(255,0,128,0.35))",
+          }}>
+            {T.hero.heading2}
+          </span>
+          <br />
+          <span style={{ fontSize: "clamp(22px,6vw,30px)" }}>{T.hero.heading3}</span>
+        </h1>
+
+        <p className="text-center text-[14px] font-bold mt-2 mb-4" style={{ color: "#4A3020" }}>
+          {T.hero.desc}{" "}
+          <span style={{ color: "#FF0080" }}>{T.hero.descHighlight}</span>
+        </p>
+
+        {/* Green badge */}
+        <div className="flex overflow-hidden rounded-xl mb-5 text-[13px] font-bold">
+          <span className="flex items-center justify-center px-3 py-2.5 shrink-0" style={{ background: "#15803d" }}>
+            <CheckCheck size={18} color="#fff" strokeWidth={2.5} />
+          </span>
+          <span className="flex items-center px-3 py-2.5 leading-snug" style={{ background: "#166534", color: "#fff" }}>
+            {T.hero.greenBadge}
+          </span>
+        </div>
+
+        {/* Stats row */}
+        <div className="grid grid-cols-3 gap-2">
+          {(
+            [
+              { target: 95, suffix: "K+", label: T.hero.statReviews, Icon: Star },
+              { target: 7, suffix: "+", label: T.hero.statYears, Icon: Clock },
+              { target: 100, suffix: "%", label: T.hero.statVerified, Icon: ShieldCheck },
+            ] as const
+          ).map(({ target, suffix, label, Icon }) => (
+            <div
+              key={label}
+              className="text-center relative overflow-hidden rounded-2xl py-3 px-2"
+              style={{
+                background: "linear-gradient(170deg,rgb(255,245,180) 0%,rgb(255,225,110) 45%,rgb(240,195,60) 100%)",
+                border: "1px solid rgba(180,130,40,0.50)",
+                borderBottom: "3px solid rgba(160,110,20,0.55)",
+                boxShadow: "0 4px 16px rgba(120,80,0,0.18),inset 0 1px 0 rgba(255,255,255,0.70)",
+              }}
+            >
+              <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg,rgba(255,255,255,0.30) 0%,transparent 50%)", borderRadius: "inherit" }} />
+              <div className="text-[22px] font-black" style={{ color: "#7A4F00", lineHeight: 1 }}>
+                <CountUp target={target} suffix={suffix} />
+              </div>
+              <div className="flex items-center justify-center gap-1 mt-1">
+                <Icon size={11} style={{ color: "#8A5E10" }} strokeWidth={2} />
+                <span className="text-[11px] font-bold" style={{ color: "#8A5E10" }}>{label}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="relative z-10 h-[3px] shimmer-bar" />
+    </section>
+  );
+}
+
+// ─── Export ───────────────────────────────────────────────────────────────────
+export default function CloneHero() {
+  return (
+    <>
+      <HeroDesktop />
+      <HeroMobile />
+    </>
   );
 }
