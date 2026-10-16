@@ -1,19 +1,23 @@
+"use client";
 import Image from "next/image";
 import { IMG } from "@/lib/images";
-
-const navLinks = [
-  ["หน้าแรก",              "/"],
-  ["เกี่ยวกับเรา",          "/about"],
-  ["บริการแม่บ้าน",         "/services/maid"],
-  ["พี่เลี้ยงเด็ก",         "/services/nanny"],
-  ["แม่บ้านดูแลผู้สูงอายุ", "/services/elder"],
-  ["แรงงานทั่วไป",          "/services/labor"],
-  ["รูปกิจกรรม",            "/gallery"],
-  ["บทความ",                "/articles"],
-  ["ติดต่อเรา",             "/contact"],
-];
+import { useT } from "@/context/LanguageContext";
 
 export default function CloneFooter() {
+  const T = useT();
+
+  const navLinks: [string, string][] = [
+    [T.nav.home,         "/"],
+    [T.nav.about,        "/about"],
+    [T.nav.serviceMaid,  "/services/maid"],
+    [T.nav.serviceNanny, "/services/nanny"],
+    [T.nav.serviceElder, "/services/elder"],
+    [T.nav.serviceLabor, "/services/labor"],
+    [T.nav.gallery,      "/gallery"],
+    [T.nav.articles,     "/articles"],
+    [T.nav.contact,      "/contact"],
+  ];
+
   return (
     <footer style={{ background: "#1A1410", color: "#fff" }}>
 
@@ -23,7 +27,7 @@ export default function CloneFooter() {
       {/* CTA strip */}
       <div className="border-b border-white/[0.07] py-8 text-center">
         <p className="text-[26px] font-black tracking-[0.10em] uppercase text-gold/70 mb-4">
-          ✦ ติดต่อเราเลยตอนนี้ เพื่อรับข้อเสนอพิเศษ ✦
+          ✦ {T.footer.ctaText} ✦
         </p>
         <div className="flex gap-3 justify-center flex-wrap">
 
@@ -34,7 +38,7 @@ export default function CloneFooter() {
             boxShadow: "0 4px 16px rgba(243,0,60,0.35)",
           }}>
             <span style={{ background: "#C4006A", padding: "11px 13px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <Image src="/icon/calling-icon.svg" alt="โทร" width={20} height={20} style={{ filter: "brightness(0) invert(1)", width: 20, height: 20 }} />
+              <Image src="/icon/calling-icon.svg" alt="call" width={20} height={20} style={{ filter: "brightness(0) invert(1)", width: 20, height: 20 }} />
             </span>
             <span style={{ background: "linear-gradient(180deg,#FF00CB 0%,#F3003C 100%)", padding: "11px 16px", display: "flex", alignItems: "center", fontWeight: 700, fontSize: 13, color: "#fff", whiteSpace: "nowrap" }}>
               061-843-7666
@@ -62,9 +66,9 @@ export default function CloneFooter() {
       <div className="max-w-6xl mx-auto px-5 py-12 lg:py-16">
         <div className="grid md:grid-cols-3 gap-8 lg:gap-12 mb-10">
 
-          {/* Brand + address + stats */}
+          {/* Brand + address */}
           <div>
-              <Image
+            <Image
               src={IMG.logo}
               alt="แม่บ้านดีดี"
               width={0}
@@ -83,9 +87,9 @@ export default function CloneFooter() {
               <div className="flex gap-2">
                 {[
                   { href: "https://www.facebook.com/dedemaid2019", icon: "/icon/facebook-icon.svg", alt: "Facebook" },
-                  { href: "https://www.youtube.com/@ddmaid", icon: "/icon/youtube-icon.svg",  alt: "YouTube"  },
-                  { href: "https://line.me/R/ti/p/@maid-jn82", icon: "/icon/line-icon.svg",     alt: "LINE"     },
-                  { href: "https://www.tiktok.com/@maiddede2423", icon: "/icon/tiktok-icon.svg",   alt: "TikTok"   },
+                  { href: "https://www.youtube.com/@ddmaid",       icon: "/icon/youtube-icon.svg",  alt: "YouTube"  },
+                  { href: "https://line.me/R/ti/p/@maid-jn82",     icon: "/icon/line-icon.svg",     alt: "LINE"     },
+                  { href: "https://www.tiktok.com/@maiddede2423",  icon: "/icon/tiktok-icon.svg",   alt: "TikTok"   },
                 ].map(({ href, icon, alt }) => (
                   <a
                     key={alt}
@@ -110,10 +114,10 @@ export default function CloneFooter() {
 
           {/* Nav links */}
           <div>
-            <h4 className="text-gold/80 font-black text-[18px] uppercase tracking-[0.14em] mb-5">เมนู</h4>
+            <h4 className="text-gold/80 font-black text-[18px] uppercase tracking-[0.14em] mb-5">{T.footer.menuHeading}</h4>
             <ul className="grid grid-cols-2 gap-x-4 gap-y-2 list-none p-0 m-0">
               {navLinks.map(([label, href]) => (
-                <li key={label}>
+                <li key={href}>
                   <a href={href} className="foot-link">{label}</a>
                 </li>
               ))}
@@ -122,7 +126,7 @@ export default function CloneFooter() {
 
           {/* LINE QR */}
           <div>
-            <h4 className="text-gold/80 font-bold text-[18px] uppercase tracking-[0.10em] mb-2">สแกนเพิ่มเพื่อนไลน์</h4>
+            <h4 className="text-gold/80 font-bold text-[18px] uppercase tracking-[0.10em] mb-2">{T.footer.scanLine}</h4>
             <div className="inline-block bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.30)] mb-2">
               <Image
                 src={IMG.lineQr}
@@ -136,11 +140,9 @@ export default function CloneFooter() {
 
         <div className="border-t border-gold/10 pt-5 flex flex-wrap justify-between gap-2">
           <p className="text-[#A09890] text-xs">
-            © {new Date().getFullYear()} หจก.จัดหางานแม่บ้านดีดี เซอร์วิส · สงวนลิขสิทธิ์
+            © {new Date().getFullYear()} หจก.จัดหางานแม่บ้านดีดี เซอร์วิส · {T.footer.copyright}
           </p>
-          <p className="text-[#A09890] text-xs">
-            ใบอนุญาตจัดหางาน · กรมการจัดหางาน · กรุงเทพมหานคร
-          </p>
+          <p className="text-[#A09890] text-xs">{T.footer.licenseText}</p>
         </div>
       </div>
     </footer>

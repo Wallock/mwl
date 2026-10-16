@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useT } from "@/context/LanguageContext";
 
 const BASE = "https://www.maidwonderland.com";
 const API = `${BASE}/wp-json/wp/v2/posts?page=1&per_page=8&_embed`;
@@ -16,10 +17,9 @@ interface WPPost {
   };
 }
 
-function formatThaiDate(iso: string) {
+function formatDate(iso: string, months: readonly string[]) {
   const d = new Date(iso);
-  const thMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-  return `${d.getDate()} ${thMonths[d.getMonth()]}`;
+  return `${d.getDate()} ${months[d.getMonth()]}`;
 }
 
 function decodeHtml(str: string) {
@@ -31,6 +31,7 @@ function decodeHtml(str: string) {
 }
 
 export default function CloneArticles() {
+  const T = useT();
   const [posts, setPosts] = useState<WPPost[]>([]);
 
   useEffect(() => {
@@ -46,13 +47,13 @@ export default function CloneArticles() {
       <div className="relative z-10 max-w-6xl mx-auto px-5">
 
         <div className="text-center mb-10 lg:mb-14">
-          <span className="sec-badge">บทความ</span>
+          <span className="sec-badge">{T.articles.badge}</span>
           <h2
             className="font-black text-ink mt-3 mb-2"
             style={{ fontSize: "clamp(30px,3.5vw,46px)" }}
           >
-            ข้อมูล{" "}
-            <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">น่ารู้</span>
+            {T.articles.title}{" "}
+            <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">{T.articles.titleHighlight}</span>
           </h2>
         </div>
 
@@ -83,7 +84,7 @@ export default function CloneArticles() {
                   </div>
                   <div className="p-3.5 lg:p-4">
                     <span className="inline-flex items-center gap-1 bg-gold/10 text-gold-dark border border-gold/25 rounded-full px-2.5 py-0.5 text-[10px] font-bold mb-2">
-                      ✦ {formatThaiDate(post.date)}
+                      ✦ {formatDate(post.date, T.articles.months)}
                     </span>
                     <h3 className="text-xs lg:text-[13px] font-bold text-ink leading-[1.5] line-clamp-3">{title}</h3>
                   </div>
@@ -95,7 +96,7 @@ export default function CloneArticles() {
 
         <div className="text-center mt-10">
           <Link href="/articles" className="btn-pink">
-            ดูบทความทั้งหมด →
+            {T.articles.viewAll}
           </Link>
         </div>
       </div>

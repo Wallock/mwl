@@ -4,6 +4,7 @@ import Link from "next/link";
 import CloneNavbar from "@/components/CloneNavbar";
 import CloneFooter from "@/components/CloneFooter";
 import { useEffect, useRef, useState } from "react";
+import { useT } from "@/context/LanguageContext";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const BASE = "https://www.maidwonderland.com";
@@ -20,10 +21,9 @@ interface WPPost {
   };
 }
 
-function formatThaiDate(iso: string) {
+function formatDate(iso: string, months: readonly string[], yearOffset: number) {
   const d = new Date(iso);
-  const m = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
-  return `${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear() + 543}`;
+  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear() + yearOffset}`;
 }
 
 function decodeHtml(str: string) {
@@ -37,6 +37,7 @@ function decodeHtml(str: string) {
 }
 
 export default function ArticlesPage() {
+  const T = useT();
   const [posts, setPosts] = useState<WPPost[] | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -77,15 +78,15 @@ export default function ArticlesPage() {
         >
           <div className="bg-dots absolute inset-0 pointer-events-none z-0 opacity-30" />
           <div className="relative z-10 max-w-6xl mx-auto px-5 text-center">
-            <span className="sec-badge mb-4">บทความ</span>
+            <span className="sec-badge mb-4">{T.articles.badge}</span>
             <h1 className="font-black text-ink mt-4 mb-4" style={{ fontSize: "clamp(36px,5vw,60px)" }}>
-              ข้อมูล{" "}
+              {T.articles.title}{" "}
               <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">
-                น่ารู้
+                {T.articles.titleHighlight}
               </span>
             </h1>
             <p className="text-ink-muted text-base lg:text-lg max-w-xl mx-auto leading-relaxed">
-              บทความและข้อมูลเกี่ยวกับบริการแม่บ้าน พี่เลี้ยงเด็ก และการดูแลบ้าน
+              {T.articles.pageDesc}
             </p>
           </div>
         </section>
@@ -101,7 +102,7 @@ export default function ArticlesPage() {
               </div>
             ) : posts.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-ink-muted text-base">ไม่พบบทความในขณะนี้</p>
+                <p className="text-ink-muted text-base">{T.articles.empty}</p>
               </div>
             ) : (
               <>
@@ -128,7 +129,7 @@ export default function ArticlesPage() {
                         </div>
                         <div className="p-3.5 lg:p-4">
                           <span className="inline-flex items-center gap-1 bg-gold/10 text-gold-dark border border-gold/25 rounded-full px-2.5 py-0.5 text-[10px] font-bold mb-2">
-                            ✦ {formatThaiDate(post.date)}
+                            ✦ {formatDate(post.date, T.articles.months, T.articles.yearOffset)}
                           </span>
                           <h2 className="text-xs lg:text-[13px] font-bold text-ink leading-[1.5] line-clamp-3 mb-1">{title}</h2>
                           {excerpt && (

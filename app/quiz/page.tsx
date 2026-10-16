@@ -6,6 +6,7 @@ import CloneNavbar from "@/components/CloneNavbar";
 import { QUESTIONS, PROVINCES, SERVICE_INFO, getVisibleQuestions } from "@/lib/assessment/data";
 import { computeResult, buildRequirements } from "@/lib/assessment/engine";
 import type { Answers, QuestionId, AssessmentResult } from "@/lib/assessment/types";
+import { useT } from "@/context/LanguageContext";
 
 type Phase = "quiz" | "analyzing" | "results" | "success";
 
@@ -28,6 +29,8 @@ const EMPTY_LEAD: LeadForm = {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function QuizPage() {
+  const t = useT();
+  const qt = t.quizPage;
   const [phase, setPhase]         = useState<Phase>("quiz");
   const [answers, setAnswers]     = useState<Partial<Answers>>({});
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -125,12 +128,12 @@ export default function QuizPage() {
 
   function validateLead(): boolean {
     const errs: Partial<Record<keyof LeadForm, string>> = {};
-    if (!lead.full_name.trim())   errs.full_name        = "กรุณากรอกชื่อ";
+    if (!lead.full_name.trim())   errs.full_name        = qt.errName;
     if (!/^0[0-9]{8,9}$/.test(lead.phone.replace(/[-\s]/g, "")))
-      errs.phone = "เบอร์โทรไม่ถูกต้อง (ตัวอย่าง: 0812345678)";
-    if (!lead.province)           errs.province         = "กรุณาเลือกจังหวัด";
-    if (!lead.privacy)            errs.privacy          = "กรุณายอมรับนโยบายความเป็นส่วนตัว";
-    if (!lead.contact_consent)    errs.contact_consent  = "กรุณายินยอมให้ติดต่อกลับ";
+      errs.phone = qt.errPhone;
+    if (!lead.province)           errs.province         = qt.errProvince;
+    if (!lead.privacy)            errs.privacy          = qt.errPrivacy;
+    if (!lead.contact_consent)    errs.contact_consent  = qt.errConsent;
     setLeadErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -162,10 +165,10 @@ export default function QuizPage() {
       if (data.success) {
         setPhase("success");
       } else {
-        setSubmitError(data.message || "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
+        setSubmitError(data.message || qt.errGeneric);
       }
     } catch {
-      setSubmitError("ไม่สามารถเชื่อมต่อได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่");
+      setSubmitError(qt.errNetwork);
     } finally {
       setSubmitting(false);
     }
@@ -205,11 +208,11 @@ export default function QuizPage() {
                       style={{ color: "#9E7D48", background: "none", border: "none", cursor: "pointer" }}
                     >
                       <ArrowLeft size={14} />
-                      ก่อนหน้า
+                      {qt.back}
                     </button>
                   ) : <div />}
                   <span className="text-[13px] font-bold" style={{ color: "#B0A090" }}>
-                    ข้อ {currentIdx + 1} จาก {totalVisible}
+                    {qt.questionOf} {currentIdx + 1} {qt.questionFrom} {totalVisible}
                   </span>
                 </div>
                 {/* Progress bar */}
@@ -323,7 +326,7 @@ export default function QuizPage() {
                       {((answers.notes as string | undefined) ?? "").length} / {currentQ.maxLength}
                     </p>
                     <p className="text-[12px] mt-1" style={{ color: "#B0A090" }}>
-                      ไม่ต้องระบุข้อมูลสุขภาพที่ละเอียดอ่อน หรือข้อมูลส่วนบุคคลของบุคคลอื่น
+                      {qt.noSensitiveData}
                     </p>
                   </div>
                 )}
@@ -340,14 +343,14 @@ export default function QuizPage() {
                   }}
                 >
                   {currentIdx < totalVisible - 1 ? (
-                    <>ถัดไป <ArrowRight size={16} /></>
+                    <>{qt.next} <ArrowRight size={16} /></>
                   ) : (
-                    <>สรุปผลประเมิน <ArrowRight size={16} /></>
+                    <>{qt.summarize} <ArrowRight size={16} /></>
                   )}
                 </button>
 
                 {!currentQ.required && currentIdx === totalVisible - 1 && (
-                  <p className="text-center text-[12px] mt-2" style={{ color: "#B0A090" }}>ข้อนี้ไม่บังคับ กดสรุปผลได้เลย</p>
+                  <p className="text-center text-[12px] mt-2" style={{ color: "#B0A090" }}>{qt.optional}</p>
                 )}
               </div>
             </div>
@@ -365,10 +368,10 @@ export default function QuizPage() {
               >
                 <Loader2 size={38} className="animate-spin" style={{ color: "#C9A96E" }} />
               </div>
-              <h2 className="font-black text-ink text-[22px] mb-2">กำลังวิเคราะห์ผล...</h2>
-              <p style={{ color: "#9E7D48", fontSize: 14 }}>วิเคราะห์จากคำตอบ {totalVisible} ข้อของคุณ</p>
+              <h2 className="font-black text-ink text-[22px] mb-2">{qt.analyzingTitle}</h2>
+              <p style={{ color: "#9E7D48", fontSize: 14 }}>{qt.analyzingDesc} {totalVisible} {qt.analyzingUnit}</p>
               <div className="flex justify-center gap-4 mt-8">
-                {["งานบ้าน", "ดูแลเด็ก", "ผู้สูงอายุ", "งานผสม"].map((label, i) => (
+                {qt.analyzingLabels.map((label: string, i: number) => (
                   <div key={label} className="text-center">
                     <div className="w-2 h-2 rounded-full mx-auto mb-1.5 animate-bounce"
                       style={{ background: "#C9A96E", animationDelay: `${i * 0.18}s` }} />
@@ -391,7 +394,7 @@ export default function QuizPage() {
                 >
                   <div className="px-6 py-5" style={{ background: "linear-gradient(135deg,#1A1410 0%,#2D1B0E 100%)" }}>
                     <p className="text-[11px] font-bold tracking-[0.15em] uppercase mb-1"
-                      style={{ color: "rgba(201,169,110,0.70)" }}>ผลการวิเคราะห์</p>
+                      style={{ color: "rgba(201,169,110,0.70)" }}>{qt.resultLabel}</p>
                     <h2 className="font-black text-white text-[22px] lg:text-[24px]">
                       {SERVICE_INFO[result.service].name}
                     </h2>
@@ -402,7 +405,7 @@ export default function QuizPage() {
 
                   <div className="px-6 py-5">
                     <div className="mb-4">
-                      <p className="text-[11px] font-bold uppercase tracking-wide mb-2.5" style={{ color: "#9E7D48" }}>เหตุผล</p>
+                      <p className="text-[11px] font-bold uppercase tracking-wide mb-2.5" style={{ color: "#9E7D48" }}>{qt.reasonsLabel}</p>
                       <ul className="space-y-2">
                         {result.reasons.map(r => (
                           <li key={r} className="flex items-start gap-2.5 text-[14px]" style={{ color: "#3A2A1A" }}>
@@ -414,7 +417,7 @@ export default function QuizPage() {
                     </div>
 
                     <div className="mb-4 p-3.5 rounded-xl" style={{ background: "rgba(201,169,110,0.07)", border: "1px solid rgba(201,169,110,0.18)" }}>
-                      <p className="text-[11px] font-bold uppercase tracking-wide mb-2" style={{ color: "#9E7D48" }}>ลักษณะงานที่เหมาะสม</p>
+                      <p className="text-[11px] font-bold uppercase tracking-wide mb-2" style={{ color: "#9E7D48" }}>{qt.dutiesLabel}</p>
                       <div className="flex flex-wrap gap-1.5">
                         {SERVICE_INFO[result.service].duties.map(d => (
                           <span key={d} className="text-[12px] font-semibold px-2.5 py-1 rounded-full"
@@ -427,7 +430,7 @@ export default function QuizPage() {
 
                     {result.precautions.length > 0 && (
                       <div className="mb-4 p-3.5 rounded-xl" style={{ background: "rgba(212,87,110,0.06)", border: "1px solid rgba(212,87,110,0.18)" }}>
-                        <p className="text-[11px] font-bold uppercase tracking-wide mb-2" style={{ color: "#B03255" }}>สิ่งที่ควรตกลงก่อนเริ่มงาน</p>
+                        <p className="text-[11px] font-bold uppercase tracking-wide mb-2" style={{ color: "#B03255" }}>{qt.precautionsLabel}</p>
                         <ul className="space-y-1.5">
                           {result.precautions.map(p => (
                             <li key={p} className="flex items-start gap-2 text-[13px]" style={{ color: "#5A2A3A" }}>
@@ -443,13 +446,13 @@ export default function QuizPage() {
                       <div className="mb-4 p-3.5 rounded-xl flex gap-3" style={{ background: "rgba(201,169,110,0.10)", border: "1px solid rgba(201,169,110,0.30)" }}>
                         <AlertCircle size={15} className="shrink-0 mt-0.5" style={{ color: "#C9A96E" }} />
                         <p className="text-[13px] font-semibold" style={{ color: "#7A5C28" }}>
-                          กรณีนี้ต้องให้ผู้เชี่ยวชาญตรวจสอบขอบเขตงานก่อนจัดหาแม่บ้าน
+                          {qt.specialistNote}
                         </p>
                       </div>
                     )}
 
                     <p className="text-[11px] leading-relaxed" style={{ color: "#B0A090" }}>
-                      ผลนี้เป็นคำแนะนำเบื้องต้น เจ้าหน้าที่จะช่วยตรวจสอบขอบเขตงาน ทักษะ และความเหมาะสมก่อนจัดหาแม่บ้าน
+                      {qt.disclaimerNote}
                     </p>
                   </div>
                 </div>
@@ -461,7 +464,7 @@ export default function QuizPage() {
                   className="w-full rounded-2xl py-3.5 font-bold text-white text-[14px] flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5"
                   style={{ background: "linear-gradient(135deg,#3EB600,#066D00)", boxShadow: "0 4px 24px rgba(6,109,0,0.28)", textDecoration: "none" }}
                 >
-                  ปรึกษาผ่าน LINE
+                  {qt.consultLine}
                   <ArrowRight size={15} />
                 </a>
 
@@ -471,7 +474,7 @@ export default function QuizPage() {
                   style={{ background: "rgba(201,169,110,0.10)", color: "#9E7D48", border: "1px solid rgba(201,169,110,0.28)" }}
                 >
                   <RotateCcw size={13} />
-                  ประเมินใหม่อีกครั้ง
+                  {qt.retake}
                 </button>
               </div>
 
@@ -483,23 +486,23 @@ export default function QuizPage() {
                 >
                   <div className="px-6 py-5" style={{ background: "linear-gradient(135deg,#1A1410,#2D1B0E)" }}>
                     <p className="text-[11px] font-bold tracking-[0.15em] uppercase mb-1" style={{ color: "rgba(201,169,110,0.70)" }}>
-                      ให้เจ้าหน้าที่ช่วย
+                      {qt.formTitle}
                     </p>
-                    <h3 className="font-black text-white text-[18px]">ฝากข้อมูลให้ติดต่อกลับ</h3>
+                    <h3 className="font-black text-white text-[18px]">{qt.formSubtitle}</h3>
                     <p className="text-[12px] mt-1" style={{ color: "rgba(255,255,255,0.45)" }}>
-                      ฟรี ไม่มีค่าใช้จ่าย ติดต่อกลับภายใน 24 ชม.
+                      {qt.formFreeNote}
                     </p>
                   </div>
 
                   <form onSubmit={handleSubmit} className="px-6 py-5 space-y-3.5" noValidate>
                     <div>
                       <label className="block text-[12px] font-bold text-ink mb-1.5">
-                        ชื่อผู้ติดต่อ <span style={{ color: "#D4576E" }}>*</span>
+                        {qt.fieldName} <span style={{ color: "#D4576E" }}>*</span>
                       </label>
                       <input
                         value={lead.full_name}
                         onChange={e => setLead(l => ({ ...l, full_name: e.target.value }))}
-                        placeholder="ชื่อ-นามสกุล"
+                        placeholder={qt.fieldNamePlaceholder}
                         className="w-full rounded-xl px-4 py-2.5 text-[14px] outline-none transition-all"
                         style={{ border: `1.5px solid ${leadErrors.full_name ? "#D4576E" : "rgba(201,169,110,0.30)"}`, background: "#FEFDF9" }}
                         onFocus={e => { e.currentTarget.style.borderColor = "#C9A96E"; }}
@@ -510,7 +513,7 @@ export default function QuizPage() {
 
                     <div>
                       <label className="block text-[12px] font-bold text-ink mb-1.5">
-                        เบอร์ติดต่อ <span style={{ color: "#D4576E" }}>*</span>
+                        {qt.fieldPhone} <span style={{ color: "#D4576E" }}>*</span>
                       </label>
                       <input
                         type="tel"
@@ -527,7 +530,7 @@ export default function QuizPage() {
 
                     <div>
                       <label className="block text-[12px] font-bold text-ink mb-1.5">
-                        จังหวัด <span style={{ color: "#D4576E" }}>*</span>
+                        {qt.fieldProvince} <span style={{ color: "#D4576E" }}>*</span>
                       </label>
                       <select
                         value={lead.province}
@@ -539,14 +542,14 @@ export default function QuizPage() {
                           color: lead.province ? "#1A1410" : "#B0A090",
                         }}
                       >
-                        <option value="">เลือกจังหวัด</option>
+                        <option value="">{qt.fieldProvinceSelect}</option>
                         {PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}
                       </select>
                       {leadErrors.province && <p className="text-[11px] mt-1" style={{ color: "#D4576E" }}>{leadErrors.province}</p>}
                     </div>
 
                     <div>
-                      <label className="block text-[12px] font-bold text-ink mb-1.5">LINE ID <span style={{ color: "#B0A090" }}>(ไม่บังคับ)</span></label>
+                      <label className="block text-[12px] font-bold text-ink mb-1.5">LINE ID <span style={{ color: "#B0A090" }}>({qt.fieldLineOptional})</span></label>
                       <input
                         value={lead.line_id}
                         onChange={e => setLead(l => ({ ...l, line_id: e.target.value }))}
@@ -559,18 +562,18 @@ export default function QuizPage() {
                     </div>
 
                     <div>
-                      <label className="block text-[12px] font-bold text-ink mb-1.5">เวลาที่สะดวกให้ติดต่อกลับ <span style={{ color: "#B0A090" }}>(ไม่บังคับ)</span></label>
+                      <label className="block text-[12px] font-bold text-ink mb-1.5">{qt.fieldTime} <span style={{ color: "#B0A090" }}>({qt.fieldLineOptional})</span></label>
                       <select
                         value={lead.convenient_time}
                         onChange={e => setLead(l => ({ ...l, convenient_time: e.target.value }))}
                         className="w-full rounded-xl px-4 py-2.5 text-[14px] outline-none"
                         style={{ border: "1.5px solid rgba(201,169,110,0.30)", background: "#FEFDF9", color: lead.convenient_time ? "#1A1410" : "#B0A090" }}
                       >
-                        <option value="">เลือก (ไม่บังคับ)</option>
-                        <option value="morning">เช้า 08:00–12:00</option>
-                        <option value="afternoon">บ่าย 12:00–17:00</option>
-                        <option value="evening">เย็น 17:00–20:00</option>
-                        <option value="anytime">ได้ทุกเวลา</option>
+                        <option value="">{qt.fieldTimeSelect}</option>
+                        <option value="morning">{qt.timeMorning}</option>
+                        <option value="afternoon">{qt.timeAfternoon}</option>
+                        <option value="evening">{qt.timeEvening}</option>
+                        <option value="anytime">{qt.timeAnytime}</option>
                       </select>
                     </div>
 
@@ -589,7 +592,7 @@ export default function QuizPage() {
                           {lead.privacy && <Check size={11} color="#fff" strokeWidth={3} />}
                         </span>
                         <span className="text-[12px] leading-relaxed" style={{ color: "#5A4A3A" }}>
-                          รับทราบ <Link href="/privacy" className="underline" style={{ color: "#9E7D48" }}>นโยบายความเป็นส่วนตัว</Link>{" "}
+                          {qt.consentPrivacy} <Link href="/privacy" className="underline" style={{ color: "#9E7D48" }}>{qt.consentPrivacyLink}</Link>{" "}
                           <span style={{ color: "#D4576E" }}>*</span>
                         </span>
                       </label>
@@ -609,7 +612,7 @@ export default function QuizPage() {
                           {lead.contact_consent && <Check size={11} color="#fff" strokeWidth={3} />}
                         </span>
                         <span className="text-[12px] leading-relaxed" style={{ color: "#5A4A3A" }}>
-                          ยินยอมให้ติดต่อกลับเกี่ยวกับบริการที่ร้องขอ <span style={{ color: "#D4576E" }}>*</span>
+                          {qt.consentContact} <span style={{ color: "#D4576E" }}>*</span>
                         </span>
                       </label>
                       {leadErrors.contact_consent && <p className="text-[11px] pl-6" style={{ color: "#D4576E" }}>{leadErrors.contact_consent}</p>}
@@ -627,7 +630,7 @@ export default function QuizPage() {
                         >
                           {lead.marketing && <Check size={11} color="#fff" strokeWidth={3} />}
                         </span>
-                        <span className="text-[12px]" style={{ color: "#5A4A3A" }}>ยินยอมรับข่าวสาร/โปรโมชั่น (ไม่บังคับ)</span>
+                        <span className="text-[12px]" style={{ color: "#5A4A3A" }}>{qt.consentMarketing}</span>
                       </label>
                     </div>
 
@@ -649,7 +652,7 @@ export default function QuizPage() {
                       }}
                     >
                       {submitting ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle2 size={16} />}
-                      {submitting ? "กำลังส่ง..." : "ส่งข้อมูล"}
+                      {submitting ? qt.submitting : qt.submit}
                     </button>
                   </form>
                 </div>
@@ -670,10 +673,11 @@ export default function QuizPage() {
               >
                 <CheckCircle2 size={40} style={{ color: "#6B9E78" }} />
               </div>
-              <h2 className="font-black text-ink text-[24px] mb-2">ส่งข้อมูลเรียบร้อยแล้ว!</h2>
+              <h2 className="font-black text-ink text-[24px] mb-2">{qt.successTitle}</h2>
               <p className="text-[15px] leading-relaxed mb-8" style={{ color: "#7A6555" }}>
-                เจ้าหน้าที่จะติดต่อกลับภายใน 24 ชม.<br />
-                ขอบคุณที่ไว้วางใจแม่บ้านดีดีเซอร์วิส
+                {qt.successDesc.split("\n").map((line, i) => (
+                  <span key={i}>{line}{i === 0 && <br />}</span>
+                ))}
               </p>
               <div className="flex flex-col gap-3">
                 <Link
@@ -681,7 +685,7 @@ export default function QuizPage() {
                   className="rounded-xl px-8 py-3.5 font-black text-white text-[15px] flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5"
                   style={{ background: "linear-gradient(135deg,#C9A96E,#9E7D48)", boxShadow: "0 6px 28px rgba(201,169,110,0.38)", textDecoration: "none" }}
                 >
-                  กลับหน้าหลัก
+                  {qt.backHome}
                 </Link>
                 <a
                   href="https://line.me/ti/p/~@dede1721"
@@ -690,7 +694,7 @@ export default function QuizPage() {
                   className="rounded-xl px-8 py-3.5 font-bold text-[14px] flex items-center justify-center gap-2 transition-all hover:opacity-70"
                   style={{ background: "rgba(62,182,0,0.08)", color: "#2E7800", border: "1px solid rgba(62,182,0,0.25)", textDecoration: "none" }}
                 >
-                  ติดต่อผ่าน LINE โดยตรง
+                  {qt.contactLine}
                 </a>
               </div>
             </div>

@@ -2,8 +2,10 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X, ShieldCheck, Settings2 } from "lucide-react";
+import { useT } from "@/context/LanguageContext";
 
 export default function CookieBanner() {
+  const T = useT();
   const [visible, setVisible] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
 
@@ -65,10 +67,10 @@ export default function CookieBanner() {
                     </div>
                     <div>
                       <h3 className="font-black text-[14px] leading-tight" style={{ color: "#1A1410" }}>
-                        เว็บไซต์นี้ใช้คุกกี้
+                        {T.cookie.title}
                       </h3>
                       <p className="text-[11px]" style={{ color: "#9E7D48" }}>
-                        เพื่อปรับปรุงประสบการณ์ใช้งาน
+                        {T.cookie.subtitle}
                       </p>
                     </div>
                   </div>
@@ -95,8 +97,8 @@ export default function CookieBanner() {
                         style={{ background: "rgba(201,169,110,0.06)", border: "1px solid rgba(201,169,110,0.18)" }}
                       >
                         {[
-                          { icon: ShieldCheck, label: "จำเป็น", desc: "ฟังก์ชันพื้นฐานของเว็บ" },
-                          { icon: Settings2, label: "วิเคราะห์", desc: "Google Analytics" },
+                          { icon: ShieldCheck, label: T.cookie.necessary, desc: T.cookie.necessaryDesc },
+                          { icon: Settings2,   label: T.cookie.analytics, desc: T.cookie.analyticsDesc },
                         ].map(({ icon: Icon, label, desc }) => (
                           <div key={label} className="flex items-center gap-3">
                             <Icon size={13} strokeWidth={2} style={{ color: "#9E7D48", flexShrink: 0 }} />
@@ -118,7 +120,7 @@ export default function CookieBanner() {
                     whileTap={{ scale: 0.98 }}
                     transition={{ type: "spring", stiffness: 400, damping: 20 }}
                   >
-                    ยอมรับทั้งหมด
+                    {T.cookie.acceptAll}
                   </motion.button>
 
                   <motion.button
@@ -128,7 +130,7 @@ export default function CookieBanner() {
                     whileTap={{ scale: 0.97 }}
                     transition={{ duration: 0.15 }}
                   >
-                    {showDetail ? "ซ่อน" : "รายละเอียด"}
+                    {showDetail ? T.cookie.hide : T.cookie.details}
                   </motion.button>
 
                   <motion.button
@@ -138,7 +140,7 @@ export default function CookieBanner() {
                     whileTap={{ scale: 0.97 }}
                     transition={{ duration: 0.15 }}
                   >
-                    ปฏิเสธ
+                    {T.cookie.decline}
                   </motion.button>
                 </div>
               </div>
