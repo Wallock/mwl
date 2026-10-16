@@ -21,7 +21,8 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
           const tick = (now: number) => {
             const p = Math.min((now - start) / duration, 1);
             const ease = 1 - Math.pow(1 - p, 3);
-            setValue(Math.floor(ease * target));
+            const raw = ease * target;
+            setValue(Number.isInteger(target) ? Math.floor(raw) : Math.round(raw * 10) / 10);
             if (p < 1) requestAnimationFrame(tick);
             else setValue(target);
           };
@@ -36,7 +37,7 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
 
   return (
     <div ref={ref}>
-      {value.toLocaleString()}
+      {Number.isInteger(target) ? value.toLocaleString() : value.toFixed(1)}
       {suffix}
     </div>
   );
@@ -215,8 +216,8 @@ function HeroDesktop() {
         <div style={{ display: "flex", gap: "0.8vw", marginTop: "1.5vw" }}>
           {(
             [
-              { target: 95, suffix: "K+", label: T.hero.statReviews, Icon: Star },
-              { target: 7, suffix: "+", label: T.hero.statYears, Icon: Clock },
+              { target: 1.7, suffix: "k", label: T.hero.statReviews, Icon: Star },
+              { target: 8, suffix: "+", label: T.hero.statYears, Icon: Clock },
               { target: 100, suffix: "%", label: T.hero.statVerified, Icon: ShieldCheck },
             ] as const
           ).map(({ target, suffix, label, Icon }) => (
@@ -344,8 +345,8 @@ function HeroMobile() {
         <div className="grid grid-cols-3 gap-2">
           {(
             [
-              { target: 95, suffix: "K+", label: T.hero.statReviews, Icon: Star },
-              { target: 7, suffix: "+", label: T.hero.statYears, Icon: Clock },
+              { target: 1.7, suffix: "k", label: T.hero.statReviews, Icon: Star },
+              { target: 8, suffix: "+", label: T.hero.statYears, Icon: Clock },
               { target: 100, suffix: "%", label: T.hero.statVerified, Icon: ShieldCheck },
             ] as const
           ).map(({ target, suffix, label, Icon }) => (

@@ -1,18 +1,38 @@
 "use client";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Reveal from "./Reveal";
-import { ShieldCheck, BadgeCheck, UserCheck, BookOpen, MapPin } from "lucide-react";
+import { ShieldCheck, BadgeCheck, UserCheck, BookOpen, MapPin, ZoomIn } from "lucide-react";
 import QuizCTACard from "./QuizCTACard";
-import { motion } from "framer-motion";
-import LicenseLightbox from "./LicenseLightbox";
+import { motion, AnimatePresence } from "framer-motion";
 import { useT } from "@/context/LanguageContext";
 
 const sliderImages = [1,2,3,4,5,6,7,8,9].map(n => `/images/silde/${n}-300x200.webp`);
 const checkIcons = [ShieldCheck, UserCheck, BadgeCheck, BookOpen];
+const trustImages = [
+  "/images/trust/ตรวจโรคติดต่อ.webp",
+  "/images/trust/บริการตรวจประวัติอาชญากรรม.webp",
+  "/images/trust/license.webp",
+  "/images/trust/license.webp",
+];
 
 export default function CloneTrust() {
   const T = useT();
   const checks = T.trust.checks.map((c, i) => ({ ...c, icon: checkIcons[i] }));
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const paused = useRef(false);
+  const INTERVAL = 3000;
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (!paused.current) {
+        setActiveIdx(i => (i + 1) % checks.length);
+      }
+    }, INTERVAL);
+    return () => clearInterval(timer);
+  }, [checks.length]);
+
   return (
     <section className="relative overflow-hidden" style={{ background: "var(--surface-2)" }}>
 
@@ -85,17 +105,30 @@ export default function CloneTrust() {
         <div className="grid lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_440px] gap-10 lg:gap-14 items-start">
 
           {/* LEFT — horizontal credential rows */}
-          <div className="space-y-3">
+          <div
+            className="space-y-3"
+            onMouseEnter={() => { paused.current = true; }}
+            onMouseLeave={() => { paused.current = false; }}
+          >
             {checks.map((c, i) => {
               const Icon = c.icon;
+              const isActive = activeIdx === i;
               return (
                 <Reveal key={c.num} delay={i * 70}>
                   <motion.div
-                    className="flex items-center gap-4 lg:gap-5 rounded-2xl px-5 lg:px-6 py-5 relative overflow-hidden cursor-default"
+                    onClick={() => { setActiveIdx(i); paused.current = true; setTimeout(() => { paused.current = false; }, 6000); }}
+                    className="flex items-center gap-4 lg:gap-5 rounded-2xl px-5 lg:px-6 py-5 relative overflow-hidden cursor-pointer"
                     style={{
-                      background: "linear-gradient(120deg, rgba(201,169,110,0.10) 0%, rgba(255,255,255,0.97) 45%, rgba(201,169,110,0.05) 100%)",
-                      border: "1px solid rgba(201,169,110,0.22)",
-                      boxShadow: "0 2px 16px rgba(100,60,0,0.06)",
+                      background: isActive
+                        ? "linear-gradient(120deg, rgba(201,169,110,0.22) 0%, rgba(255,255,255,0.97) 45%, rgba(201,169,110,0.12) 100%)"
+                        : "linear-gradient(120deg, rgba(201,169,110,0.10) 0%, rgba(255,255,255,0.97) 45%, rgba(201,169,110,0.05) 100%)",
+                      border: isActive
+                        ? "1.5px solid rgba(201,169,110,0.60)"
+                        : "1px solid rgba(201,169,110,0.22)",
+                      boxShadow: isActive
+                        ? "0 8px 32px rgba(100,60,0,0.13)"
+                        : "0 2px 16px rgba(100,60,0,0.06)",
+                      transition: "background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease",
                     }}
                     whileHover={{
                       x: 6,
@@ -104,6 +137,27 @@ export default function CloneTrust() {
                     }}
                     transition={{ type: "spring", stiffness: 350, damping: 22 }}
                   >
+                    {/* Active indicator bar */}
+                    {isActive && (
+                      <div
+                        className="absolute left-0 top-3 bottom-3 w-1 rounded-full"
+                        style={{ background: "linear-gradient(180deg, #C9A96E, #9E7D48)" }}
+                      />
+                    )}
+                    {/* Progress bar */}
+                    {isActive && (
+                      <div className="absolute bottom-0 left-0 right-0 h-[3px] rounded-b-2xl overflow-hidden" style={{ background: "rgba(201,169,110,0.15)" }}>
+                        <div
+                          key={activeIdx}
+                          className="h-full rounded-b-2xl"
+                          style={{
+                            background: "linear-gradient(90deg, #C9A96E, #9E7D48)",
+                            animation: `trust-progress ${INTERVAL}ms linear forwards`,
+                          }}
+                        />
+                      </div>
+                    )}
+
                     {/* Big gold number */}
                     <span
                       className="font-black leading-none shrink-0 tabular-nums"
@@ -184,17 +238,120 @@ export default function CloneTrust() {
             </Reveal>
           </div>
 
-          {/* RIGHT — license + stats */}
-          <Reveal delay={150} className="flex flex-col items-center -mt-10 lg:-mt-16">
+          {/* RIGHT — dynamic image */}
+          <Reveal delay={150} className="flex flex-col items-center mt-4 lg:mt-6">
+            <div className="w-full flex flex-col items-center gap-3">
+              <button
+                onClick={() => setLightboxOpen(true)}
+                className="group relative w-full cursor-zoom-in overflow-hidden focus-visible:outline-none animate-float rounded-2xl"
+                aria-label="ดูรูปขนาดเต็ม"
+                style={trustImages[activeIdx].includes("license") ? { boxShadow: "0 8px 32px rgba(100,60,0,0.10)" } : { border: "1px solid rgba(201,169,110,0.28)", boxShadow: "0 8px 32px rgba(100,60,0,0.10)" }}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIdx}
+                    initial={{ opacity: 0, y: 12, scale: 1.02 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                    transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    style={trustImages[activeIdx].includes("license") ? { aspectRatio: "1/1", position: "relative" } : undefined}
+                  >
+                    {trustImages[activeIdx].includes("license") ? (
+                      <Image
+                        src={trustImages[activeIdx]}
+                        alt={checks[activeIdx]?.title ?? ""}
+                        fill
+                        className="object-contain"
+                        priority
+                      />
+                    ) : (
+                      <Image
+                        src={trustImages[activeIdx]}
+                        alt={checks[activeIdx]?.title ?? ""}
+                        width={440}
+                        height={440}
+                        className="w-full block"
+                        style={{ height: "auto", display: "block" }}
+                        priority
+                      />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
 
-            <LicenseLightbox />
-
+                {/* Hover overlay */}
+                <div
+                  className="absolute inset-0 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100 transition-opacity duration-250"
+                  style={{ background: "linear-gradient(to top, rgba(26,20,16,0.55) 0%, transparent 55%)" }}
+                >
+                  <span className="flex items-center gap-1.5 bg-white/95 text-[#1A1410] text-xs font-bold px-3.5 py-1.5 rounded-full shadow-lg">
+                    <ZoomIn size={12} />
+                    ดูขนาดเต็ม
+                  </span>
+                </div>
+              </button>
+            </div>
           </Reveal>
         </div>
 
         <QuizCTACard />
 
       </div>
+
+      {/* Lightbox */}
+      {lightboxOpen && (
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-5"
+          style={{ background: "rgba(10,6,3,0.88)", backdropFilter: "blur(8px)" }}
+          onClick={() => setLightboxOpen(false)}
+        >
+          <div
+            className="relative"
+            style={{ animation: "lightbox-in 0.20s ease-out" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              className="rounded-2xl overflow-hidden"
+              style={{
+                border: "1px solid rgba(201,169,110,0.35)",
+                boxShadow: "0 32px 80px rgba(0,0,0,0.55)",
+              }}
+            >
+              <Image
+                src={trustImages[activeIdx]}
+                alt={checks[activeIdx]?.title ?? ""}
+                width={800}
+                height={1120}
+                className="block"
+                style={{
+                  height: "min(88dvh, 80vh)",
+                  width: "auto",
+                  maxWidth: "min(92vw, 560px)",
+                  objectFit: "contain",
+                }}
+              />
+            </div>
+            <button
+              onClick={() => setLightboxOpen(false)}
+              className="absolute -top-3 -right-3 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg"
+              style={{ background: "linear-gradient(135deg,#C9A96E,#9E7D48)" }}
+              aria-label="ปิด"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes lightbox-in {
+          from { opacity: 0; transform: scale(0.90) translateY(12px); }
+          to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes trust-progress {
+          from { width: 0%; }
+          to   { width: 100%; }
+        }
+      `}</style>
     </section>
   );
 }

@@ -15,10 +15,10 @@ const checks = [
 ];
 
 const stats = [
-  { Icon: Users,  value: "95,000+", label: "ลูกค้าและรีวิว" },
-  { Icon: Clock,  value: "20+",     label: "ปีประสบการณ์" },
-  { Icon: MapPin, value: "56",      label: "พื้นที่ให้บริการ" },
-  { Icon: Award,  value: "100%",    label: "มีใบอนุญาตถูกต้อง" },
+  { Icon: Users,  value: "1.7k", label: "ลูกค้าและรีวิว" },
+  { Icon: Clock,  value: "8+",   label: "ปีประสบการณ์" },
+  { Icon: MapPin, value: "56",   label: "พื้นที่ให้บริการ" },
+  { Icon: Award,  value: "100%", label: "มีใบอนุญาตถูกต้อง" },
 ];
 
 const dscPhotos = [
@@ -31,11 +31,11 @@ const dscPhotos = [
 
 export const metadata = {
   title: "เกี่ยวกับเรา | แม่บ้านดีดี เซอร์วิส",
-  description: "หจก.จัดหางานแม่บ้านดีดี เซอร์วิส ผู้นำจัดหาแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ มีใบอนุญาตถูกต้อง ประสบการณ์กว่า 20 ปี รีวิวกว่า 95,000 รีวิว โทร 061-843-7666",
+  description: "หจก.จัดหางานแม่บ้านดีดี เซอร์วิส ผู้นำจัดหาแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ มีใบอนุญาตถูกต้อง ประสบการณ์กว่า 8 ปี รีวิวกว่า 1,700 รีวิว โทร 061-843-7666",
   alternates: { canonical: "https://www.maidwonderland.com/about" },
   openGraph: {
     title: "เกี่ยวกับเรา | แม่บ้านดีดี เซอร์วิส",
-    description: "หจก.จัดหางานแม่บ้านดีดี เซอร์วิส ผู้นำจัดหาแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ มีใบอนุญาตถูกต้อง ประสบการณ์กว่า 20 ปี รีวิวกว่า 95,000 รีวิว โทร 061-843-7666",
+    description: "หจก.จัดหางานแม่บ้านดีดี เซอร์วิส ผู้นำจัดหาแม่บ้าน พี่เลี้ยงเด็ก ผู้ดูแลผู้สูงอายุ มีใบอนุญาตถูกต้อง ประสบการณ์กว่า 8 ปี รีวิวกว่า 1,700 รีวิว โทร 061-843-7666",
     url: "https://www.maidwonderland.com/about",
     siteName: "แม่บ้านดีดี เซอร์วิส",
     images: [{ url: "/images/bg_header.webp", width: 1920, height: 800, alt: "แม่บ้านดีดี เซอร์วิส" }],
@@ -69,7 +69,7 @@ export default function AboutPage() {
                 </span>
               </h1>
               <p className="text-ink-muted text-base lg:text-lg max-w-xl mx-auto leading-relaxed">
-                ผู้ให้บริการจัดหาแม่บ้านและบุคลากรบ้านชั้นนำ ด้วยประสบการณ์กว่า 20 ปี
+                ผู้ให้บริการจัดหาแม่บ้านและบุคลากรบ้านชั้นนำ ด้วยประสบการณ์กว่า 8 ปี
               </p>
             </Reveal>
           </div>
@@ -158,6 +158,67 @@ export default function AboutPage() {
                           <Icon size={15} color="#fff" strokeWidth={2.5} />
                         </div>
                         <span className="text-[13px] font-bold text-ink leading-tight">{text}</span>
+                      </div>
+                    </Reveal>
+                  ))}
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+
+        {/* License */}
+        <section className="relative bg-[#FBF8F2] overflow-hidden py-12 lg:py-16">
+          <div className="bg-dots absolute inset-0 pointer-events-none z-0 opacity-30" />
+          <div className="relative z-10 max-w-5xl mx-auto px-5">
+            <Reveal className="text-center mb-10">
+              <span className="sec-badge mb-4">ได้รับการรับรองอย่างเป็นทางการ</span>
+              <h2 className="font-black text-ink mt-3 mb-2" style={{ fontSize: "clamp(26px,3vw,38px)" }}>
+                ใบอนุญาต{" "}
+                <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">
+                  จัดหางาน
+                </span>
+              </h2>
+              <p className="text-ink-muted text-sm lg:text-base max-w-md mx-auto mt-2">
+                ได้รับใบอนุญาตจัดหางานในประเทศ จากกรมการจัดหางาน กระทรวงแรงงาน อย่างถูกต้องตามกฎหมาย
+              </p>
+            </Reveal>
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+              <Reveal delay={80} className="flex justify-center">
+                <div
+                  className="w-full max-w-sm rounded-2xl overflow-hidden"
+                  style={{
+                    boxShadow: "0 12px 48px rgba(100,60,0,0.16)",
+                  }}
+                >
+                  <Image
+                    src={IMG.license}
+                    alt="ใบอนุญาตจัดหางาน หจก.จัดหางานแม่บ้านดีดี เซอร์วิส"
+                    width={440}
+                    height={616}
+                    className="w-full block"
+                    style={{ height: "auto" }}
+                  />
+                </div>
+              </Reveal>
+              <Reveal delay={160}>
+                <div className="space-y-5">
+                  {[
+                    { Icon: FileCheck,     title: "ใบอนุญาตจัดหางานในประเทศ",      desc: "ออกโดยกรมการจัดหางาน กระทรวงแรงงาน กรุงเทพมหานคร" },
+                    { Icon: ShieldCheck,   title: "ตรวจประวัติอาชญากรรม 100%",      desc: "คนงานทุกคนผ่านการตรวจสอบก่อนส่งงาน" },
+                    { Icon: Stethoscope,   title: "ตรวจโรคติดต่อ 5 ชนิด",          desc: "มาตรฐานกรมการแพทย์ ก่อนเข้าปฏิบัติงาน" },
+                    { Icon: GraduationCap, title: "อบรมมาตรฐานก่อนส่งงาน",         desc: "หลักสูตรครบถ้วน ครอบคลุมทั่วประเทศไทย" },
+                  ].map(({ Icon, title, desc }, i) => (
+                    <Reveal key={title} delay={i * 70}>
+                      <div className="flex items-start gap-4 bg-white border border-[#EDE8DF] rounded-2xl px-5 py-4 shadow-[0_4px_24px_rgba(100,60,0,0.06)]">
+                        <div className="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center mt-0.5"
+                          style={{ background: "linear-gradient(135deg,#C9A96E 0%,#9E7D48 100%)" }}>
+                          <Icon size={18} color="#fff" strokeWidth={2} />
+                        </div>
+                        <div>
+                          <p className="font-black text-ink text-[15px] leading-tight mb-0.5">{title}</p>
+                          <p className="text-ink-muted text-[13px]">{desc}</p>
+                        </div>
                       </div>
                     </Reveal>
                   ))}

@@ -11,8 +11,8 @@ export default function CloneAbout() {
   const T = useT();
   const checks = T.about.checks.map((text, i) => ({ Icon: checkIcons[i], text }));
   const stats = [
-    { n: "20+",  l: T.about.statYears },
-    { n: "95K+", l: T.about.statReviews },
+    { n: "8+",   l: T.about.statYears },
+    { n: "1.7k", l: T.about.statReviews },
     { n: "56",   l: T.about.statProvinces },
   ];
   return (
