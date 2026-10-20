@@ -14,12 +14,12 @@ export default function QuizCTACard() {
 
         {/* Mobile: image absolute right */}
         <div className="absolute bottom-0 right-0 z-10 w-[190px] pointer-events-none select-none drop-shadow-xl lg:hidden">
-          <Image src="/images/pic.png" alt="" width={190} height={320} className="object-contain w-full h-auto" priority={false} />
+          <Image src="/images/pic.webp" alt="" width={190} height={320} className="object-contain w-full h-auto" priority={false} />
         </div>
 
         {/* Desktop: image absolute left, overflows above card */}
         <div className="hidden lg:block absolute left-10 bottom-0 z-10 w-[175px] pointer-events-none select-none drop-shadow-xl">
-          <Image src="/images/pic.png" alt="" width={175} height={295} className="object-contain w-full h-auto" priority={false} />
+          <Image src="/images/pic.webp" alt="" width={175} height={295} className="object-contain w-full h-auto" priority={false} />
         </div>
 
         <Link href="/quiz" className="group block w-full rounded-2xl relative" style={{ textDecoration: "none" }}>

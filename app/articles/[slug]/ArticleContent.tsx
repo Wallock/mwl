@@ -9,7 +9,7 @@ import CloneFooter from "@/components/CloneFooter";
 import GSAPAnimations from "@/components/GSAPAnimations";
 import ShareButtons from "@/components/ShareButtons";
 
-const BASE = "https://www.maidwonderland.com";
+const BASE = process.env.WORDPRESS_URL ?? "https://www.maidwonderland.com";
 
 interface WPPost {
   id: number;

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import FloatingContact from "@/components/FloatingContact";
+import FloatingQuiz from "@/components/FloatingQuiz";
 import CookieBanner from "@/components/CookieBanner";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { LanguageProvider } from "@/context/LanguageContext";
@@ -41,6 +42,7 @@ export default function RootLayout({
         <LanguageProvider>
           {children}
           <FloatingContact />
+          <FloatingQuiz />
           <LanguageSwitcher />
           <CookieBanner />
           {/* eslint-disable-next-line @next/next/no-img-element */}

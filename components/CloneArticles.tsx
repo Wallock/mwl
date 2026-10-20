@@ -1,11 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { useT } from "@/context/LanguageContext";
-
-const BASE = "https://www.maidwonderland.com";
-const API = `${BASE}/wp-json/wp/v2/posts?page=1&per_page=8&_embed`;
 
 interface WPPost {
   id: number;
@@ -30,16 +26,9 @@ function decodeHtml(str: string) {
     .replace(/&#8221;/g, '"');
 }
 
-export default function CloneArticles() {
+export default function CloneArticles({ initialPosts = [] }: { initialPosts?: WPPost[] }) {
   const T = useT();
-  const [posts, setPosts] = useState<WPPost[]>([]);
-
-  useEffect(() => {
-    fetch(API)
-      .then((r) => r.json())
-      .then((data) => { if (Array.isArray(data)) setPosts(data); })
-      .catch(() => {});
-  }, []);
+  const posts = initialPosts;
 
   return (
     <section className="relative bg-white py-12 lg:py-16 overflow-hidden">

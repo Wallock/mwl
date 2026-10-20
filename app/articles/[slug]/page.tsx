@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ArticleContent from "./ArticleContent";
 
-const BASE = "https://www.maidwonderland.com";
+const BASE = process.env.WORDPRESS_URL ?? "https://www.maidwonderland.com";
 const UA = "Mozilla/5.0 (compatible; NextJS/1.0; +https://maidwonderland.com)";
 
 interface WPPost {

@@ -60,7 +60,22 @@ const jsonLd = {
   ],
 };
 
-export default function Home() {
+async function fetchArticles() {
+  try {
+    const res = await fetch(
+      `${process.env.WORDPRESS_URL ?? "https://www.maidwonderland.com"}/wp-json/wp/v2/posts?page=1&per_page=8&_embed`,
+      { cache: "force-cache" }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+export default async function Home() {
+  const articles = await fetchArticles();
   return (
     <>
       {/* LCP preload */}
@@ -103,7 +118,7 @@ export default function Home() {
         <WaveDivider bgColor="#FBF8F2" fillColor="#ffffff" />
 
         {/* white */}
-        <CloneArticles />
+        <CloneArticles initialPosts={articles} />
         <WaveDivider bgColor="#ffffff" fillColor="#FAFAF9" />
 
         {/* #FAFAF9 */}

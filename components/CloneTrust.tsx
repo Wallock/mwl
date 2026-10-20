@@ -101,6 +101,20 @@ export default function CloneTrust() {
           </p>
         </Reveal>
 
+        {/* widdd banner */}
+        <Reveal delay={100}>
+          <div className="w-full rounded-2xl overflow-hidden mb-10 lg:mb-14" style={{ boxShadow: "0 4px 24px rgba(100,60,0,0.10)" }}>
+            <Image
+              src="/images/trust/widdd.webp"
+              alt="ตรวจโรคและตรวจประวัติอาชญากรรม"
+              width={1200}
+              height={400}
+              className="w-full h-auto block"
+              priority={false}
+            />
+          </div>
+        </Reveal>
+
         {/* Body grid */}
         <div className="grid lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_440px] gap-10 lg:gap-14 items-start">
 
