@@ -1,9 +1,11 @@
 name: Build & Deploy
 
 on:
+  schedule:
+    - cron: '0 */3 * * *'  # ทุก 3 ชั่วโมง
   push:
     branches: [main]
-  workflow_dispatch:
+  workflow_dispatch:        # กด run manual ได้
 
 jobs:
   build-and-deploy:
@@ -22,18 +24,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build
+      - name: Build static export
+        run: STATIC_EXPORT=1 npm run build
         env:
           WORDPRESS_URL: ${{ secrets.WORDPRESS_URL }}
           NEXT_PUBLIC_WORDPRESS_URL: ${{ secrets.WORDPRESS_URL }}
-
-      - name: Prepare deploy folder
-        run: |
-          mkdir -p deploy
-          cp -r .next/standalone/. deploy/
-          cp -r .next/static deploy/.next/static
-          cp -r public deploy/public
+          NODE_TLS_REJECT_UNAUTHORIZED: '0'
 
       - name: Deploy to host via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -41,6 +37,12 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./deploy/
-          server-dir: /home/maidwon1/nextjs_app/
+          local-dir: ./out/
+          server-dir: /public_html/
           dangerous-clean-slate: false
+          exclude: |
+            **/.htaccess
+            **/wp-config.php
+            **/wp-admin/**
+            **/wp-includes/**
+            **/wp-content/**

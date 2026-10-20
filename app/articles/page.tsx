@@ -2,8 +2,6 @@ import CloneNavbar from "@/components/CloneNavbar";
 import CloneFooter from "@/components/CloneFooter";
 import ArticlesClient, { type WPPost } from "./ArticlesClient";
 
-export const revalidate = 3600; // ISR — refresh every hour
-
 const WP_BASE = process.env.WORDPRESS_URL ?? "https://www.maidwonderland.com";
 const PER_PAGE = 12;
 

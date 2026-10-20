@@ -1,8 +1,18 @@
 import type { NextConfig } from "next";
 
+if (process.env.NODE_ENV !== "production" || process.env.STATIC_EXPORT === "1") {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+}
+
+const isStaticExport = process.env.STATIC_EXPORT === "1";
+
 const nextConfig: NextConfig = {
-  output: "standalone",
+  ...(isStaticExport && {
+    output: "export",
+    trailingSlash: true,
+  }),
   images: {
+    unoptimized: isStaticExport,
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "www.maidwonderland.com" },
