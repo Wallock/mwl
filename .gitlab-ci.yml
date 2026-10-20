@@ -1,0 +1,21 @@
+stages:
+  - deploy
+
+build-and-deploy:
+  stage: deploy
+  image: node:20
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - when: manual
+  script:
+    - npm ci
+    - STATIC_EXPORT=1 npm run build
+    - apt-get update -qq && apt-get install -y -qq lftp
+    - lftp -c "
+        set ssl:verify-certificate no;
+        open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_SERVER;
+        mirror --reverse --delete --exclude-glob .htaccess --exclude-glob wp-config.php --exclude wp-admin/ --exclude wp-includes/ --exclude wp-content/ out/ /public_html/;
+        bye"
+  environment:
+    name: production
