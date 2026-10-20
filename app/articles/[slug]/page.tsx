@@ -26,7 +26,7 @@ async function getPostMeta(slug: string): Promise<WPPost | null> {
     try {
       const res = await fetch(
         `${BASE}/wp-json/wp/v2/posts?slug=${encodeURIComponent(s)}&_embed`,
-        { headers: { "User-Agent": UA }, next: { revalidate: 3600 } }
+        { headers: { "User-Agent": UA }, cache: "force-cache" }
       );
       if (!res.ok) continue;
       const posts: WPPost[] = await res.json();
